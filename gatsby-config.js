@@ -30,7 +30,7 @@ module.exports = {
           hardCacheMediaFiles: false,
           allow404images: true,
         },
-        excludeFieldNames: [`generalSettings`, `email`, `allSettings`, `generalSettingsEmail`, `viewer`, `pinged`, `toPing`],
+        excludeFieldNames: [`generalSettings`, `email`, `allSettings`, `generalSettingsEmail`, `viewer`, `pinged`, `toPing`, `isSticky`],
         debug: {
           graphql: {
             showQueryOnError: false,
@@ -43,7 +43,7 @@ module.exports = {
         },
         type: {
           RootQuery: {
-            excludeFieldNames: [`generalSettings`, `email`, `allSettings`, `generalSettingsEmail`, `viewer`, `pinged`, `toPing`]
+            excludeFieldNames: [`generalSettings`, `email`, `allSettings`, `generalSettingsEmail`, `viewer`, `pinged`, `toPing`, `isSticky`]
           },
           Comment: {
             limit: 0
