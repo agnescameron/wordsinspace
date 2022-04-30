@@ -49,7 +49,7 @@ module.exports = {
             limit: 0
           },
           Post: {
-            excludeFieldNames: [`pinged`, `toPing`],
+            excludeFieldNames: [`pinged`, `toPing`, `isSticky`],
             limit: process.env.NODE_ENV === `development`
               ? 10
               : null
