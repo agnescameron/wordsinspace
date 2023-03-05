@@ -162,7 +162,7 @@ export default function HomePage() {
               height: '120px',
             }}>
             <a aria-label='about' href="/about/"><Sticker_About_text id='sticker-about-text' /><Sticker_About style={{height: '120%'}} id='sticker-about' /></a>
-            <a aria-label='email' href="mailto:matterns@newschool.edu?subject=Hi Shannon!"><Sticker_Email_text id='sticker-email-text' /><Sticker_Email style={{height: '120%'}} id='sticker-email' /></a>
+            <a aria-label='email' href="mailto:scmatter@sas.upenn.edu?subject=Hi Shannon!"><Sticker_Email_text id='sticker-email-text' /><Sticker_Email style={{height: '120%'}} id='sticker-email' /></a>
             <a aria-label='twitter' href="https://twitter.com/shannonmattern"><Sticker_Twitter_text id='sticker-twitter-text' /><Sticker_Twitter style={{height: '120%'}} id='sticker-twitter' /></a>
             <a aria-label='CV' href="https://icd.wordsinspace.net/static_files/matterncv.pdf"><Sticker_CV_text id='sticker-cv-text' /><Sticker_CV style={{height: '120%'}} id='sticker-cv'/></a>
             <a aria-label='pinboard' href="https://pinboard.in/u:shannon_mattern"><Sticker_Pinboard_text id='sticker-pinboard-text' /><Sticker_Pinboard style={{height: '120%'}} id='sticker-pinboard' /></a>
