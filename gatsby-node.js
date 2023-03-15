@@ -152,7 +152,8 @@ exports.createPages = async ({ actions, graphql }) => {
   await Promise.all(
     contentNodes.map(async (node, i) => {
       const { nodeType, uri, id } = node
-
+     console.log(uri)
+     
       await actions.createPage({
         component: path.resolve(`./src/templates/${nodeType.toLowerCase()}.js`),
         path: uri,
