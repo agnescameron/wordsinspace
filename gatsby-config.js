@@ -28,7 +28,7 @@ module.exports = {
         },
         production: {
           hardCacheMediaFiles: false,
-          allow404images: true,
+          // allow404images: true, // outdated with latest version
         },
         excludeFieldNames: [`generalSettings`, `email`, `allSettings`, `generalSettingsEmail`, `viewer`, `pinged`, `toPing`],
         debug: {
@@ -117,7 +117,7 @@ module.exports = {
       resolve: `gatsby-plugin-netlify-redirect`,
     },
     {
-      resolve: "gatsby-plugin-breakpoints",
+      resolve: `gatsby-plugin-breakpoints`,
       options: {
         queries: {
           desktop: '(min-width: 1024px)',
@@ -126,5 +126,6 @@ module.exports = {
     },
     `gatsby-plugin-netlify`,
     `gatsby-plugin-sitemap`,
+    `gatsby-plugin-image`,
   ],
 }
