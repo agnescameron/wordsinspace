@@ -6,7 +6,14 @@ import HomeCategory from "./homeCategory"
 
 const HomeItem = ({item, index}) => {
   const connectedNode = item?.connectedNode
-  const thumbnail = connectedNode?.node?.featuredImage?.node?.localFile?.childImageSharp?.fluid
+  const fetchedImage = connectedNode?.node?.featuredImage?.node?.localFile?.childImageSharp
+  
+  if (!fetchedImage) {
+    console.error("could not fetch image", connectedNode.toString())
+    return
+  }
+
+  const thumbnail = fetchedImage?.fluid
   const title = connectedNode?.node?.title
   const category = connectedNode?.node?.categories?.nodes[0]?.name
   const isThree = index%3 === 0

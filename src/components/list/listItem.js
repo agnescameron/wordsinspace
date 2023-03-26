@@ -15,12 +15,17 @@ const ListItem = ({item, isTagMode, invertedTheme, mobileList, listWidth, listTi
 
   const [thumbnail, setThumbnail] = useState('')
   const [isVisible, setIsVisible] = useState(false);
-
   const handleMouseEnter = (e,item) => {
     e.preventDefault()
+
+    const fetchedImage = item?.featuredImage?.node?.localFile?.childImageSharp
+    if (!fetchedImage) {
+      console.error("could not fetch image", item.toString())
+      return
+    }
     setIsVisible(true)
     setThumbnail(!isTagMode
-                 ? item?.featuredImage?.node?.localFile?.childImageSharp?.fluid
+                 ? fetchedImage.fluid
                  : item?.featuredImage?.node?.guid
                  )
   }
