@@ -84,6 +84,7 @@ export const query = graphql`
         featuredImage {
           node {
             localFile {
+              publicURL
               childImageSharp {
                 fluid {
                   ...GatsbyImageSharpFluid
@@ -122,6 +123,7 @@ export const query = graphql`
         featuredImage {
           node {
             localFile {
+              publicURL
               childImageSharp {
                 fluid {
                   ...GatsbyImageSharpFluid

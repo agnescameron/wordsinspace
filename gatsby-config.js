@@ -18,8 +18,8 @@ module.exports = {
         },
         verboseOutput: true,
         html: {
-          createStaticFiles: false,
-          useGatsbyImage: false,
+          // createStaticFiles: false,
+          // useGatsbyImage: false,
           imageQuality: 60,
           imageMaxWidth: 1400,
         },
@@ -66,6 +66,7 @@ module.exports = {
               requestConcurrency: 5,
             },
             lazyNodes: false,
+            createFileNodes: false,
           },
         }
       },

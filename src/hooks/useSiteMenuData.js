@@ -23,6 +23,7 @@ export const useSiteMenuData = () => {
                         featuredImage {
                           node {
                             localFile {
+                              publicURL
                               childImageSharp {
                                 fluid {
                                   ...GatsbyImageSharpFluid
@@ -43,6 +44,7 @@ export const useSiteMenuData = () => {
                         featuredImage {
                           node {
                             localFile {
+                              publicURL
                               childImageSharp {
                                 fluid {
                                   ...GatsbyImageSharpFluid

@@ -9,7 +9,7 @@ const HomeItem = ({item, index}) => {
   const fetchedImage = connectedNode?.node?.featuredImage?.node?.localFile?.childImageSharp
   
   if (!fetchedImage) {
-    console.error("could not fetch image", connectedNode.toString())
+    console.error("could not fetch image",item.toString())
     return
   }
 
