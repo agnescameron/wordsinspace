@@ -18,7 +18,8 @@ module.exports = {
         },
         verboseOutput: true,
         html: {
-          useGatsbyImage: true,
+          createStaticFiles: false,
+          useGatsbyImage: false,
           imageQuality: 60,
           imageMaxWidth: 1400,
         },
@@ -51,14 +52,20 @@ module.exports = {
           Post: {
             excludeFieldNames: [`pinged`, `toPing`, `isSticky`],
             limit: process.env.NODE_ENV === `development`
-              ? 10
+              ? null
               : null
           },
           Page: {
             excludeFieldNames: [`pinged`, `toPing`],
             limit: process.env.NODE_ENV === `development`
-              ? 10
+              ? null
               : null
+          },
+          MediaItem: {
+            localFile: {
+              requestConcurrency: 5,
+            },
+            lazyNodes: false,
           },
         }
       },
