@@ -58,3 +58,11 @@ Where Gatsby looks when building something dynamically - currently its either a 
 	- `mobileFooter.js` : self explanatory  <span style="color: #00f ">NEEDS CSS FIXES</span>. 
 	- `mobileIndex.js`: This is the mobile version of `index.js` which is the Landing page.
 	- `mobileWordsInSpace.js`: The left nav bar in its mobile version (becomes horizontal and moves to the top).
+
+### Troubleshooting log
+*March 2023 - useful posts*
+- https://github.com/gatsbyjs/gatsby/discussions/35147#discussioncomment-5324586
+- https://github.com/gatsbyjs/gatsby/issues/31031
+- https://github.com/gatsbyjs/gatsby/issues/34051
+- https://github.com/gatsbyjs/gatsby/issues/36101
+- https://github.com/gatsbyjs/gatsby/issues/10347
