@@ -18,14 +18,15 @@ module.exports = {
         },
         verboseOutput: true,
         html: {
-          // createStaticFiles: false,
-          // useGatsbyImage: false,
+          createStaticFiles: false,
+          useGatsbyImage: false,
           imageQuality: 60,
           imageMaxWidth: 1400,
         },
         develop: {
-          nodeUpdateInterval: 10000,
+          // nodeUpdateInterval: 10000,
           hardCacheMediaFiles: false,
+          // allow404images: true, // outdated with latest version
         },
         production: {
           hardCacheMediaFiles: false,
@@ -52,21 +53,21 @@ module.exports = {
           Post: {
             excludeFieldNames: [`pinged`, `toPing`, `isSticky`],
             limit: process.env.NODE_ENV === `development`
-              ? null
+              ? null // TODO revert to 10
               : null
           },
           Page: {
             excludeFieldNames: [`pinged`, `toPing`],
             limit: process.env.NODE_ENV === `development`
-              ? null
+              ? null // TODO revert to 10
               : null
           },
           MediaItem: {
-            localFile: {
-              requestConcurrency: 5,
-            },
-            lazyNodes: false,
-            createFileNodes: false,
+            // localFile: {
+            //   requestConcurrency: 5,
+            // },
+            // lazyNodes: false,
+            // createFileNodes: false,
           },
         }
       },
