@@ -25,7 +25,7 @@ module.exports = {
         },
         develop: {
           // nodeUpdateInterval: 10000,
-          hardCacheMediaFiles: false,
+          // hardCacheMediaFiles: false,
           // allow404images: true, // outdated with latest version
         },
         production: {
@@ -53,16 +53,17 @@ module.exports = {
           Post: {
             excludeFieldNames: [`pinged`, `toPing`, `isSticky`],
             limit: process.env.NODE_ENV === `development`
-              ? null // TODO revert to 10
+              ? 10
               : null
           },
           Page: {
             excludeFieldNames: [`pinged`, `toPing`],
             limit: process.env.NODE_ENV === `development`
-              ? null // TODO revert to 10
+              ? 10
               : null
           },
           MediaItem: {
+            // nothing below worked but keeping just in case
             // localFile: {
             //   requestConcurrency: 5,
             // },
