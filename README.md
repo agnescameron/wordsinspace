@@ -66,3 +66,4 @@ Where Gatsby looks when building something dynamically - currently its either a 
 - https://github.com/gatsbyjs/gatsby/issues/34051
 - https://github.com/gatsbyjs/gatsby/issues/36101
 - https://github.com/gatsbyjs/gatsby/issues/10347
+TLDR: Had to quarantine `post=10069` (is currently private) since one of images (prob thumbnail) was not being fetched properly.
