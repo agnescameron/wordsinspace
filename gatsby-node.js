@@ -135,10 +135,7 @@ exports.createPages = async ({ actions, graphql }) => {
     },
   } = await graphql(`
     query ALL_CONTENT_NODES {
-      allWpContentNode(
-        sort: { fields: date, order: DESC }
-        filter: { nodeType: { ne: "MediaItem" } }
-      ) {
+      allWpContentNode(sort: {date: DESC}, filter: {nodeType: {ne: "MediaItem"}}) {
         nodes {
           nodeType
           uri

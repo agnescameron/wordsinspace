@@ -78,7 +78,11 @@ export default function CategoryTemplate({data}) {
 // this is a static GraphQL query Gatsby executes when compiling so that we can have access to the different /category endpoints
 export const query = graphql`
   query getCategory($slug: String!) {
-    allWpPage(sort: {order: DESC, fields: date}, filter: {categories: {nodes: {elemMatch: {slug: {eq: $slug}}}}}) {
+    allWpPage(
+      sort: {date: DESC}
+      filter: {categories: {nodes: {elemMatch: {slug: {eq: $slug}}}}}
+    ) 
+    {
       nodes {
         slug
         title
@@ -111,7 +115,10 @@ export const query = graphql`
         }
       }
     }
-    allWpPost(sort: {order: DESC, fields: date}, filter: {categories: {nodes: {elemMatch: {slug: {eq: $slug}}}}}) {
+    allWpPost(
+      sort: {date: DESC}
+      filter: {categories: {nodes: {elemMatch: {slug: {eq: $slug}}}}}
+    ) {
       nodes {
         slug
         title

@@ -74,7 +74,7 @@ export default function Work({data}) {
 
 export const query = graphql`
   query PAGES_POSTS {
-    allWpPage(sort: {order: DESC, fields:date}) {
+    allWpPage(sort: {date: DESC})  {
       nodes {
         slug
         title
@@ -107,7 +107,7 @@ export const query = graphql`
         }
       }
     }
-    allWpPost(sort: {order: DESC, fields:date}) {
+    allWpPost(sort: {date: DESC})  {
       nodes {
         slug
         title
