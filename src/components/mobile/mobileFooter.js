@@ -20,7 +20,7 @@ const MobileFooter = () => {
           justifyContent: 'flex-end',
         }}>
         <div style={{margin: '6px 0'}} className='metadata'>
-          <a href="mailto:matterns@newschool.edu?subject=Hi Shannon!">email me</a>
+          <a href="mailto:scmatter@sas.upenn.edu?subject=Hi Shannon!">email me</a>
         </div>
 
         <div style={{margin: '6px 0'}}  className='metadata'>
