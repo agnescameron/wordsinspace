@@ -1,9 +1,10 @@
 # Words in space
 
-📌 This is the deployed repo for the live version of https://wordsinspace.net/. Ignore all other prior repos. 
-It is connected to [a Gatsby Cloud instance](https://www.gatsbyjs.com/dashboard/5a6874ee-d6ce-4893-91d1-b98fd4e79e27/sites/e44fdf3e-30f3-468f-9906-9bdfe99cfaaf/deploys) to monitor WP->Gatsby deploys and is published on Netlify. Both are under `samtous` Github credentials.
-
-The WP dashboard of the website can be accessed at https://icd.wordsinspace.net/wp-login.
+📌 **DEPLOYMENT INFO** 📌 
+- This is the deployed repo for the live version of https://wordsinspace.net/. Ignore all other prior repos. 
+- Deploys from [Netlify/ex Gatsby Cloud instance](https://app.netlify.com/sites/wordsingatsby/link/repos). 
+- Both are under `samtous` Github credentials.
+- The WP dashboard of the website can be accessed at https://icd.wordsinspace.net/wp-login.
 
 ## Important Gatsby files 
 - `gatsby-node.js` : tell Gatsby how to create pages dynamically (`src/templates/page.js`, `src/templates/post.js`, `src/templates/category.js`)
