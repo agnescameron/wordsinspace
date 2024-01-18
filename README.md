@@ -1,6 +1,6 @@
 # Words in space
 
-📌 **DEPLOYMENT INFO** 📌 
+📌**DEPLOYMENT INFO**📌 
 - This is the deployed repo for the live version of https://wordsinspace.net/. Ignore all other prior repos. 
 - Deploys from [Netlify/ex Gatsby Cloud instance](https://app.netlify.com/sites/wordsingatsby/link/repos). 
 - Both are under `samtous` Github credentials.
