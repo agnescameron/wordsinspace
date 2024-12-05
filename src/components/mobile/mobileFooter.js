@@ -24,7 +24,7 @@ const MobileFooter = () => {
         </div>
 
         <div style={{margin: '6px 0'}}  className='metadata'>
-          <a href="https://twitter.com/shannonmattern">twitter</a>
+          <a href="https://bsky.app/profile/shannonmattern.bsky.social">blueSky</a>
         </div>
 
         <div style={{margin: '6px 0'}}  className='metadata'>
