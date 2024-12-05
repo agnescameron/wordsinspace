@@ -11,6 +11,8 @@ function SEO({ description, lang, meta, author, title }) {
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
       <meta property="og:type" content="website" />
+      <meta property="og:card" content="summary" />
+      <meta property="og:image" content="https://raw.githubusercontent.com/samtous/wordsinspace/master/src/images/twittercard.png" />
       <meta name="twitter:card" content="summary" />
       <meta name="twitter:creator" content={author} />
       <meta name="twitter:title" content={title} />
