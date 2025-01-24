@@ -1,10 +1,9 @@
 import React from "react"
 import PropTypes from "prop-types"
-import { Helmet } from "react-helmet"
 
 function SEO({ description, lang, meta, author, title }) {
   return (
-    <Helmet>
+    <>
       <title>{title}</title>
       <meta name="description" content={description} />
       <meta property="og:url" content="https://wordsinspace.net/" />
@@ -20,7 +19,7 @@ function SEO({ description, lang, meta, author, title }) {
       <meta name="twitter:image" content="https://raw.githubusercontent.com/samtous/wordsinspace/master/src/images/twittercard.png" />
       <meta name="google-site-verification" content="qgz1o-wWQZm7p2-_tkORHgZtQo1b29E0RSOVNrkJREM" />
       <html lang="en" />
-    </Helmet>
+    </>
   )
 }
 

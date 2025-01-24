@@ -9,7 +9,7 @@ import ArticleContent from "../components/article/articleContent"
 import ArticleTaxonomy from "../components/article/articleTaxonomy"
 import ArticleFooter from '../components/article/articleFooter'
 
-export default function pageTemplate({ data }) {
+const pageTemplate = ({ data }) => {
 
   const { title, date, content, categories, tags, slug} = data?.allWpPage?.nodes[0]
   const hiddenTaxonomies = slug === 'about' || slug === 'upcoming-events'
@@ -17,7 +17,6 @@ export default function pageTemplate({ data }) {
   return (
     <Reader>
       <div>
-        <SEO title={title} />
         {/* ==================== Date, Categories, Tags ====================  */}
         {!hiddenTaxonomies && <ArticleTaxonomy date={date} tags={tags} categories={categories} />}
 
@@ -97,3 +96,14 @@ export const query = graphql `
     }
   }
 `
+
+export const Head = ({ data }) => {
+  const { title, date, content, categories, tags, slug} = data?.allWpPage?.nodes[0]
+    return (
+      <>
+    <SEO title={title} />
+    </>
+  )
+}
+
+export default pageTemplate;

@@ -9,14 +9,13 @@ import ArticleContent from "../components/article/articleContent"
 import ArticleTaxonomy from "../components/article/articleTaxonomy"
 import ArticleFooter from '../components/article/articleFooter'
 
-export default function postTemplate({ data }) {
+const postTemplate = ({ data }) => {
 
   const { title, date, content, categories, tags} = data?.allWpPost?.nodes[0]
 
   return (
     <Reader>
       <div>
-        <SEO title={title} />
         {/* ==================== Date, Categories, Tags ====================  */}
         <ArticleTaxonomy date={date} tags={tags} categories={categories} />
 
@@ -30,6 +29,16 @@ export default function postTemplate({ data }) {
       </div>
       <ArticleFooter />
     </Reader>
+  )
+}
+
+export const Head = ({ data }) => {
+  console.log('data is', data)
+  const { title, date, content, categories, tags, slug} = data?.allWpPost?.nodes[0]
+  return (
+    <>
+      <SEO title={title} />
+    </>
   )
 }
 
@@ -96,3 +105,5 @@ export const query = graphql`
     }
   }
 `
+
+export default postTemplate;
