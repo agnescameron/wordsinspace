@@ -1,10 +1,10 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import { render, createPortal } from "react-dom";
 
 import SearchResults from "./searchResults"
 import SearchModalText from "./searchModalText"
 
-const SearchModal = ({ isShowing, hide, searchResults, searchTerm, catName, loading}) => isShowing ? ReactDOM.createPortal(
+const SearchModal = ({ isShowing, hide, searchResults, searchTerm, catName, loading}) => isShowing ? createPortal(
   <React.Fragment>
     <div
       style={{

@@ -33,7 +33,6 @@ const postTemplate = ({ data }) => {
 }
 
 export const Head = ({ data }) => {
-  console.log('data is', data)
   const { title, date, content, categories, tags, slug} = data?.allWpPost?.nodes[0]
   return (
     <>

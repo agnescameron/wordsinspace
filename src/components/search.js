@@ -84,6 +84,7 @@ const Search = () => {
 
   function onChange(e) {
     e.preventDefault();
+    setShowResults(() => (searchTerm.length > 0 ? true : false))
     setSearchTerm(inputEl.current.value)
   }
 
