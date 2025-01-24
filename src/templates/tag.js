@@ -14,8 +14,8 @@ import Filters from "../components/filters"
 import MobileFilters from "../components/mobile/mobileFilters"
 import List from "../components/list"
 
-export default function CategoryTemplate({data}) {
-  console.log('in category template')
+export default function TagTemplate({data}) {
+  console.log('in tag template')
   const breakpoints = useBreakpoint()
   const {showDesktopFilters, showMobileFilters} = getResponsiveBrowserVars(breakpoints)
 
@@ -54,11 +54,12 @@ export default function CategoryTemplate({data}) {
                           ? sortByDate([...response?.data?.posts?.nodes, ...response?.data?.pages?.nodes]).filter((v,i,a)=>a.findIndex(t=>(t.title === v.title))===i)
                           : []
 
-  const category = data?.allWpPage?.nodes[0]?.categories?.nodes[0]?.name
+  //cant do this as page can have multi cat                          
+  const tag = data?.allWpPage?.nodes[0]?.tags?.nodes[0]?.name
 
   return (
     <Browser>
-      <SEO title={category} />
+      <SEO title={tag} />
       {showMobileFilters &&
         <MobileFilters />
       }
@@ -78,10 +79,10 @@ export default function CategoryTemplate({data}) {
 
 // this is a static GraphQL query Gatsby executes when compiling so that we can have access to the different /category endpoints
 export const query = graphql`
-  query getCategory($slug: String!) {
+  query getTag($slug: String!) {
     allWpPage(
       sort: {date: DESC}
-      filter: {categories: {nodes: {elemMatch: {slug: {eq: $slug}}}}}
+      filter: {tags: {nodes: {elemMatch: {slug: {eq: $slug}}}}}
     ) 
     {
       nodes {
@@ -118,7 +119,7 @@ export const query = graphql`
     }
     allWpPost(
       sort: {date: DESC}
-      filter: {categories: {nodes: {elemMatch: {slug: {eq: $slug}}}}}
+      filter: {tags: {nodes: {elemMatch: {slug: {eq: $slug}}}}}
     ) {
       nodes {
         slug
