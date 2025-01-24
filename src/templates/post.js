@@ -33,10 +33,15 @@ const postTemplate = ({ data }) => {
 }
 
 export const Head = ({ data }) => {
-  const { title, date, content, categories, tags, slug} = data?.allWpPost?.nodes[0]
+
+  const fetchedImage = data?.allWpPost?.nodes[0]?.featuredImage?.node?.localFile?.childImageSharp?.fluid ?
+    "https://wordsinspace.net" + data?.allWpPost?.nodes[0]?.featuredImage?.node?.localFile?.childImageSharp?.fluid?.src : 
+    `https://raw.githubusercontent.com/samtous/wordsinspace/master/src/images/twittercard.png`;
+
+  const { title } = data?.allWpPost?.nodes[0];
   return (
     <>
-      <SEO title={title} />
+      <SEO title={title} featuredImage={fetchedImage} />
     </>
   )
 }
@@ -51,6 +56,18 @@ export const query = graphql`
         date
         uri
         slug
+        featuredImage {
+          node {
+            localFile {
+              publicURL
+              childImageSharp {
+                fluid {
+                  ...GatsbyImageSharpFluid
+                }
+              }
+            }
+          }
+        }
         categories {
           nodes {
             name

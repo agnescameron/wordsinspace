@@ -43,6 +43,18 @@ export const query = graphql `
         date
         uri
         slug
+        featuredImage {
+          node {
+            localFile {
+              publicURL
+              childImageSharp {
+                fluid {
+                  ...GatsbyImageSharpFluid
+                }
+              }
+            }
+          }
+        }
         categories {
           nodes {
             name
@@ -98,10 +110,14 @@ export const query = graphql `
 `
 
 export const Head = ({ data }) => {
-  const { title, date, content, categories, tags, slug} = data?.allWpPage?.nodes[0]
-    return (
-      <>
-    <SEO title={title} />
+  const fetchedImage = data?.allWpPage?.nodes[0]?.featuredImage?.node?.localFile?.childImageSharp?.fluid ?
+    "https://wordsinspace.net" + data?.allWpPage?.nodes[0]?.featuredImage?.node?.localFile?.childImageSharp?.fluid?.src : 
+    `https://raw.githubusercontent.com/samtous/wordsinspace/master/src/images/twittercard.png`;
+
+  const { title } = data?.allWpPage?.nodes[0];
+  return (
+    <>
+      <SEO title={title} featuredImage={fetchedImage} />
     </>
   )
 }
