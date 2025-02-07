@@ -14,8 +14,9 @@ import Filters from "../components/filters"
 import MobileFilters from "../components/mobile/mobileFilters"
 import List from "../components/list"
 
-export default function CategoryTemplate({data}) {
-  console.log('in category template')
+import withLocation from "../utils/withLocation"
+
+function CategoryTemplate({data, search}) {
   const breakpoints = useBreakpoint()
   const {showDesktopFilters, showMobileFilters} = getResponsiveBrowserVars(breakpoints)
 
@@ -25,6 +26,8 @@ export default function CategoryTemplate({data}) {
 
   // initialize the tags to only those that belong to data of this category, see function definition below for more details
   const [tags, setTags] = useState(useTags())
+
+  // queryTags && setTags(queryTags.split(","))
 
   // handles clicking on Tags by updating the 'checked' key-value for every tag
   function handleSelection(e) {
@@ -41,8 +44,20 @@ export default function CategoryTemplate({data}) {
 
   // watches tags array for updates and updates the Tag Mode in case no Tag is checked
   useEffect(()=> {
+    console.log('change in tag mode', tags)
     setTagMode(tags.filter(tag=>tag.checked).length > 0)
   }, [tags])
+
+  useEffect(() => {
+    if(search.tags) {
+      const queryTags = search.tags.split(',')
+      let newTags = tags;
+      queryTags.forEach( qTag => {
+        newTags = newTags.map(tag => tag.name.toLowerCase().replace(/[\n\s]/, '-') === qTag.toLowerCase().replace(/[\n\s]/, '-') ? {...tag, checked: true } : tag)
+      })
+      setTags(newTags);
+    }
+  }, [search])
 
   // ========== //
   // Apollo query
@@ -53,6 +68,7 @@ export default function CategoryTemplate({data}) {
   const tagQueryResults = isTagMode && !response.loading
                           ? sortByDate([...response?.data?.posts?.nodes, ...response?.data?.pages?.nodes]).filter((v,i,a)=>a.findIndex(t=>(t.title === v.title))===i)
                           : []
+  console.log('tag query results are', tagQueryResults)
 
   const category = data?.allWpPage?.nodes[0]?.categories?.nodes[0]?.name
 
@@ -156,3 +172,5 @@ export const query = graphql`
     }
 
 `
+
+export default withLocation(CategoryTemplate)

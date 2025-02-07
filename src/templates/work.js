@@ -14,7 +14,9 @@ import Filters from "../components/filters"
 import MobileFilters from "../components/mobile/mobileFilters"
 import List from "../components/list"
 
-export default function Work({data}) {
+import withLocation from "../utils/withLocation"
+
+function Work({search, data}) {
   const breakpoints = useBreakpoint()
   const {showDesktopFilters, showMobileFilters} = getResponsiveBrowserVars(breakpoints)
 
@@ -42,6 +44,17 @@ export default function Work({data}) {
   useEffect(()=> {
     setTagMode(tags.filter(tag=>tag.checked).length > 0)
   }, [tags])
+
+  useEffect(() => {
+    if(search.tags) {
+      const queryTags = search.tags.split(',')
+      let newTags = tags;
+      queryTags.forEach( qTag => {
+        newTags = newTags.map(tag => tag.name.toLowerCase().replace(/[\n\s]/, '-') === qTag.toLowerCase().replace(/[\n\s]/, '-') ? {...tag, checked: true } : tag)
+      })
+      setTags(newTags);
+    }
+  }, [search])
 
   // ==========
   // Apollo query
@@ -143,3 +156,5 @@ export const query = graphql`
     }
   }
 `
+
+export default withLocation(Work);

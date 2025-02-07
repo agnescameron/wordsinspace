@@ -189,33 +189,7 @@ exports.createPages = async ({ actions, graphql }) => {
     })
   )
 
-  // ------------
-  // ------------ Create Tag endpoints
-  // ------------
-  const {
-    data: { allWpTag },
-  } = await graphql(`
-    {
-      allWpTag {
-        nodes {
-          slug
-        }
-      }
-    }
-  `)
 
-  await Promise.all(
-    allWpTag.nodes.map(async (node, index) => {
-      console.log('making tag pages', node.slug)
-      await actions.createPage({
-        component: path.resolve(`./src/templates/tag.js`),
-        path: node.slug,
-        context: {
-          slug: node.slug,
-        },
-      })
-    })
-  )
 
 
   // ------------

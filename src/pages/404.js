@@ -8,7 +8,7 @@ import Sticker_404 from '../images/assets/Sticker_404.svg'
 import { useBreakpoint } from 'gatsby-plugin-breakpoints'
 import {getResponsiveHomeVars} from "../utils/dom"
 
-export default function  NotFoundPage()  {
+export default function  NotFoundPage({data})  {
   const breakpoints = useBreakpoint();
   const {mobile404} = getResponsiveHomeVars(breakpoints)
 
@@ -36,3 +36,14 @@ export default function  NotFoundPage()  {
 	  </Home>
 	)
 }
+
+
+export const query = graphql`
+   query ALL_TAGS {
+      allWpTag {
+        nodes {
+          slug
+        }
+      }
+    }
+  `

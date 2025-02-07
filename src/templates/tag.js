@@ -15,7 +15,7 @@ import MobileFilters from "../components/mobile/mobileFilters"
 import List from "../components/list"
 
 export default function TagTemplate({data}) {
-  console.log('in tag template')
+  console.log('in tag template', data)
   const breakpoints = useBreakpoint()
   const {showDesktopFilters, showMobileFilters} = getResponsiveBrowserVars(breakpoints)
 
