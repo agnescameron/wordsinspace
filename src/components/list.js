@@ -89,7 +89,7 @@ const List = ({loading, items, isTagMode}) => {
 
             </button>
 
-            {items && items.map((item, index) => (
+            {items && items.length > 0 ? items.map((item, index) => (
               <ListItem
                 key={index}
                 item={item}
@@ -99,7 +99,7 @@ const List = ({loading, items, isTagMode}) => {
                 listWidth={listWidth}
                 listTitleWidth={listTitleWidth}
                 />
-            ))}
+            )) : <li>no results found</li> }
           </ul>
 
         }

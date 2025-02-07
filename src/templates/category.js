@@ -62,15 +62,18 @@ function CategoryTemplate({data, search}) {
   // ========== //
   // Apollo query
   // ========== //
+  const category = data?.allWpPage?.nodes[0]?.categories?.nodes[0]?.name
 
   // Apollo useQuery (imported as a hook) fetches Posts and Pages of selected Tags array
   const response = useTagSelection(tags.filter(tag=> tag.checked), isTagMode);
   const tagQueryResults = isTagMode && !response.loading
-                          ? sortByDate([...response?.data?.posts?.nodes, ...response?.data?.pages?.nodes]).filter((v,i,a)=>a.findIndex(t=>(t.title === v.title))===i)
+                          ? sortByDate([...response?.data?.posts?.nodes, ...response?.data?.pages?.nodes])
+                            .filter((v,i,a)=>a.findIndex(t=>(t.title === v.title))===i)
+                            .filter(res=>res.categories?.nodes[0]?.name.toLowerCase() === data?.allWpPage?.nodes[0]?.categories?.nodes[0]?.name.toLowerCase() )
                           : []
+                          
   console.log('tag query results are', tagQueryResults)
 
-  const category = data?.allWpPage?.nodes[0]?.categories?.nodes[0]?.name
 
   return (
     <Browser>
