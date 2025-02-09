@@ -27,8 +27,6 @@ function CategoryTemplate({data, search}) {
   // initialize the tags to only those that belong to data of this category, see function definition below for more details
   const [tags, setTags] = useState(useTags())
 
-  // queryTags && setTags(queryTags.split(","))
-
   // handles clicking on Tags by updating the 'checked' key-value for every tag
   function handleSelection(e) {
     const { name } = e.target;
@@ -62,18 +60,15 @@ function CategoryTemplate({data, search}) {
   // ========== //
   // Apollo query
   // ========== //
-  const category = data?.allWpPage?.nodes[0]?.categories?.nodes[0]?.name
+  const category = [...data?.allWpPage?.nodes, ...data?.allWpPost?.nodes][0]?.categories?.nodes[0]?.name
 
   // Apollo useQuery (imported as a hook) fetches Posts and Pages of selected Tags array
   const response = useTagSelection(tags.filter(tag=> tag.checked), isTagMode);
   const tagQueryResults = isTagMode && !response.loading
                           ? sortByDate([...response?.data?.posts?.nodes, ...response?.data?.pages?.nodes])
                             .filter((v,i,a)=>a.findIndex(t=>(t.title === v.title))===i)
-                            .filter(res=>res.categories?.nodes[0]?.name.toLowerCase() === data?.allWpPage?.nodes[0]?.categories?.nodes[0]?.name.toLowerCase() )
+                            .filter(res=>res.categories?.nodes[0]?.name.toLowerCase() === category.toLowerCase() )
                           : []
-                          
-  console.log('tag query results are', tagQueryResults)
-
 
   return (
     <Browser>
