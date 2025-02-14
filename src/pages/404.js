@@ -36,14 +36,3 @@ export default function  NotFoundPage({data})  {
 	  </Home>
 	)
 }
-
-
-export const query = graphql`
-   query ALL_TAGS {
-      allWpTag {
-        nodes {
-          slug
-        }
-      }
-    }
-  `
