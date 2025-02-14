@@ -135,6 +135,6 @@ module.exports = {
     },
     `gatsby-plugin-netlify`,
     `gatsby-plugin-sitemap`,
-    `gatsby-plugin-image`,
+    `gatsby-plugin-image`
   ],
 }

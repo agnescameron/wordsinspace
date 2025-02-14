@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react"
-import { graphql } from "gatsby"
+import { graphql, navigate } from "gatsby"
 
 import {useTags} from "../hooks/useTags"
 import {useTagSelection} from "../hooks/useTagSelection"
@@ -13,6 +13,7 @@ import SEO from "../components/seo"
 import Filters from "../components/filters"
 import MobileFilters from "../components/mobile/mobileFilters"
 import List from "../components/list"
+import queryString from 'query-string'
 
 import withLocation from "../utils/withLocation"
 
@@ -26,6 +27,22 @@ function CategoryTemplate({data, search}) {
 
   // initialize the tags to only those that belong to data of this category, see function definition below for more details
   const [tags, setTags] = useState(useTags())
+
+  const updateQuery = () => {
+    if (typeof window === "undefined") return; // Prevent SSR issues
+
+    const tagNameList = tags
+      .filter(tag => tag.checked)
+      .map(tag => tag.name.toLowerCase().replace(' ', '-'));
+
+    const uniqueTags = [...new Set(tagNameList)];
+    const newQueryString = queryString.stringify({ tags: uniqueTags }, { arrayFormat: "comma" });
+
+    // Only update URL if the query has actually changed
+    if (window.location.search !== `?${newQueryString}`) {
+      navigate(`?${newQueryString}`, { replace: true });
+    }
+  };
 
   // handles clicking on Tags by updating the 'checked' key-value for every tag
   function handleSelection(e) {
@@ -42,20 +59,31 @@ function CategoryTemplate({data, search}) {
 
   // watches tags array for updates and updates the Tag Mode in case no Tag is checked
   useEffect(()=> {
-    console.log('change in tag mode', tags)
     setTagMode(tags.filter(tag=>tag.checked).length > 0)
-  }, [tags])
+    updateQuery()
+  }, [JSON.stringify(tags.map(tag => ({ name: tag.name, checked: tag.checked })))])
 
   useEffect(() => {
     if(search.tags) {
       const queryTags = search.tags.split(',')
-      let newTags = tags;
-      queryTags.forEach( qTag => {
-        newTags = newTags.map(tag => tag.name.toLowerCase().replace(/[\n\s]/, '-') === qTag.toLowerCase().replace(/[\n\s]/, '-') ? {...tag, checked: true } : tag)
-      })
-      setTags(newTags);
+      setTags(prevTags => {
+        let updatedTags = prevTags.map(tag =>
+          queryTags.includes(tag.name.toLowerCase().replace(/[\n\s]/, '-'))
+            ? { ...tag, checked: true }
+            : { ...tag, checked: false }
+        );
+
+        // Prevent unnecessary re-renders
+        if (JSON.stringify(prevTags) === JSON.stringify(updatedTags)) {
+          return prevTags;
+        }
+
+        return updatedTags;
+      });
     }
-  }, [search])
+    //Run updateQuery() after setting tags on mount
+    setTimeout(() => updateQuery(), 0);
+  }, [])
 
   // ========== //
   // Apollo query
@@ -67,7 +95,7 @@ function CategoryTemplate({data, search}) {
   const tagQueryResults = isTagMode && !response.loading
                           ? sortByDate([...response?.data?.posts?.nodes, ...response?.data?.pages?.nodes])
                             .filter((v,i,a)=>a.findIndex(t=>(t.title === v.title))===i)
-                            .filter(res=>res.categories?.nodes[0]?.name.toLowerCase() === category.toLowerCase() )
+                            .filter(res=>res.categories?.nodes[0]?.name.toLowerCase() === category?.toLowerCase() )
                           : []
 
   return (

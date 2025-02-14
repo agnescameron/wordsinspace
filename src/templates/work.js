@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react"
-import { graphql } from "gatsby"
+import { graphql, navigate } from "gatsby"
 
 import {useTags} from "../hooks/useTags"
 import {useTagSelection} from "../hooks/useTagSelection"
@@ -13,10 +13,12 @@ import SEO from "../components/seo"
 import Filters from "../components/filters"
 import MobileFilters from "../components/mobile/mobileFilters"
 import List from "../components/list"
+import queryString from 'query-string'
 
 import withLocation from "../utils/withLocation"
 
-function Work({search, data}) {
+
+function Work({data, search}) {
   const breakpoints = useBreakpoint()
   const {showDesktopFilters, showMobileFilters} = getResponsiveBrowserVars(breakpoints)
 
@@ -26,6 +28,23 @@ function Work({search, data}) {
 
   // initialize the tags to all of the Tags available
   const [tags, setTags] = useState(useTags())
+
+  const updateQuery = () => {
+    if (typeof window === "undefined") return; // Prevent SSR issues
+
+    const tagNameList = tags
+      .filter(tag => tag.checked)
+      .map(tag => tag.name.toLowerCase().replace(' ', '-'));
+
+    const uniqueTags = [...new Set(tagNameList)];
+    const newQueryString = queryString.stringify({ tags: uniqueTags }, { arrayFormat: "comma" });
+
+    // Only update URL if the query has actually changed
+    if (window.location.search !== `?${newQueryString}`) {
+      navigate(`?${newQueryString}`, { replace: true });
+    }
+  };
+
 
   // handles clicking on Tags by updating the 'checked' key-value for every tag
   function handleSelection(e) {
@@ -43,18 +62,30 @@ function Work({search, data}) {
   // watches tags array for updates and updates the Tag Mode in case no Tag is checked
   useEffect(()=> {
     setTagMode(tags.filter(tag=>tag.checked).length > 0)
-  }, [tags])
+    updateQuery()
+  }, [JSON.stringify(tags.map(tag => ({ name: tag.name, checked: tag.checked })))])
 
   useEffect(() => {
     if(search.tags) {
       const queryTags = search.tags.split(',')
-      let newTags = tags;
-      queryTags.forEach( qTag => {
-        newTags = newTags.map(tag => tag.name.toLowerCase().replace(/[\n\s]/, '-') === qTag.toLowerCase().replace(/[\n\s]/, '-') ? {...tag, checked: true } : tag)
-      })
-      setTags(newTags);
+      setTags(prevTags => {
+        let updatedTags = prevTags.map(tag =>
+          queryTags.includes(tag.name.toLowerCase().replace(/[\n\s]/, '-'))
+            ? { ...tag, checked: true }
+            : { ...tag, checked: false }
+        );
+
+        // Prevent unnecessary re-renders
+        if (JSON.stringify(prevTags) === JSON.stringify(updatedTags)) {
+          return prevTags;
+        }
+
+        return updatedTags;
+      });
     }
-  }, [search])
+    //Run updateQuery() after setting tags on mount
+    setTimeout(() => updateQuery(), 0);
+  }, [])
 
   // ==========
   // Apollo query
