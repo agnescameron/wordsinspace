@@ -2,10 +2,10 @@ import { gql, useQuery } from '@apollo/client'
 
 // A GraphQL query looking up Posts and Pages which contain a given Tag
 const SEARCH_TAGS_QUERY = gql`
-  query SearchTagsQuery($first: Int!) {
+  query SearchTagsQuery($first: Int!, $taxArray: [TaxArray]) {
      pages(
       first: $first
-      where: {taxQuery: {taxArray: [{field: SLUG, terms: "libraries", taxonomy: TAG},{field: SLUG, terms: "archives", taxonomy: TAG},], relation: AND}}
+      where: {taxQuery: {taxArray: $taxArray, relation: AND}}
     ){
       nodes {
         id
@@ -34,7 +34,7 @@ const SEARCH_TAGS_QUERY = gql`
     }
     posts(
     first: $first
-     where: {taxQuery: {taxArray: [{field: SLUG, terms: "libraries", taxonomy: TAG},{field: SLUG, terms: "archives", taxonomy: TAG},], relation: AND}}
+     where: {taxQuery: {taxArray: $taxArray, relation: AND}}
   ) {
       nodes {
         id
@@ -75,30 +75,33 @@ export const useTagSelection = (tags, isTagMode) => {
   //   terms: [slug],
   //   operator: "IN"
   // })) : null;
-  // const taxQuery = slugs.length > 0 ? {
-  //   relation: "AND",
-  //   taxArray: slugs.map(slug => ({
-  //     taxonomy: "post_tag",
-  //     field: "slug",
-  //     terms: slug,  // Must be an array
-  //     operator: "IN"
-  //   }))
-  // } : null;
 
-const taxQuery = {
-  taxArray: [
-    { field: 'SLUG', terms: ["libraries"], taxonomy: 'TAG' },
-    { field: 'SLUG', terms: ["archives"], taxonomy: 'TAG' }
-  ],
-  relation: 'AND'
-};
+// const taxQuery = {
+//   taxArray: [
+//     { field: 'SLUG', terms: ["libraries"], taxonomy: 'TAG' },
+//     { field: 'SLUG', terms: ["archives"], taxonomy: 'TAG' }
+//   ],
+//   relation: 'AND'
+// };
 
-  console.log('taxarr')
+// const taxArray = [
+//   { field: "SLUG", terms: ["libraries"], taxonomy: "TAG" },
+//   { field: "SLUG", terms: ["archives"], taxonomy: "TAG" }
+// ];
+
+  const taxArray = slugs.map(slug => ({
+      taxonomy: "TAG",
+      field: "SLUG",
+      terms: [slug]  // Must be an array
+    }))
+
+  console.log('taxarr', taxArray)
 
   // GraphQL query to get the list of Posts and Pages of a selected Tag
   const response = useQuery(SEARCH_TAGS_QUERY, {
-    variables: {first: 100, taxQuery: taxQuery},
-    skip: !isTagMode || !taxQuery
+    variables: {first: 100, taxArray: taxArray},
+    skip: !isTagMode || !taxArray
   })
+  console.log(response)
   return response
 }
