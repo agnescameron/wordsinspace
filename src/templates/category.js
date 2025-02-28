@@ -64,6 +64,7 @@ function CategoryTemplate({data, search}) {
   }, [JSON.stringify(tags.map(tag => ({ name: tag.name, checked: tag.checked })))])
 
   useEffect(() => {
+    console.log('search tags is', search.tags)
     if(search.tags) {
       const queryTags = search.tags.split(',')
       setTags(prevTags => {
@@ -82,7 +83,7 @@ function CategoryTemplate({data, search}) {
       });
     }
     //Run updateQuery() after setting tags on mount
-    setTimeout(() => updateQuery(), 0);
+    setTimeout(() => updateQuery(), 0); // this might be the issue?
   }, [])
 
   // ========== //
