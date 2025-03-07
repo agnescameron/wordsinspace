@@ -25,11 +25,11 @@ exports.createPages = async ({ actions, graphql }) => {
   createRedirect({ fromPath: '/publications/SilentInvisibleCity.pdf', toPath: 'https://icd.wordsinspace.net/wp-content/uploads/publications/SilentInvisibleCity.pdf', isPermanent: true, force: true, statusCode: 301 })
 
   //pages that previously had parents
-  createRedirect({ fromPath: '/publications/*', toPath: '/:splat', isPermanent: true, force: true, statusCode: 301 })
-  createRedirect({ fromPath: '/presentations/*', toPath: '/:splat', isPermanent: true, force: true, statusCode: 301 })
-  createRedirect({ fromPath: '/projects/*', toPath: '/:splat', isPermanent: true, force: true, statusCode: 301 })
-  createRedirect({ fromPath: '/teaching/*', toPath: '/:splat', isPermanent: true, force: true, statusCode: 301 })
-  createRedirect({ fromPath: '/blog/*', toPath: '/:splat', isPermanent: true, force: true, statusCode: 301 })
+  createRedirect({ fromPath: '/publications/*', toPath: '/:splat', isPermanent: true, force: true, statusCode: 301, queryString: true })
+  createRedirect({ fromPath: '/presentations/*', toPath: '/:splat', isPermanent: true, force: true, statusCode: 301, queryString: true })
+  createRedirect({ fromPath: '/projects/*', toPath: '/:splat', isPermanent: true, force: true, statusCode: 301, queryString: true })
+  createRedirect({ fromPath: '/teaching/*', toPath: '/:splat', isPermanent: true, force: true, statusCode: 301, queryString: true })
+  createRedirect({ fromPath: '/blog/*', toPath: '/:splat', isPermanent: true, force: true, statusCode: 301, queryString: true })
 
   //teaching to classes
   createRedirect({ fromPath: '/teaching/', toPath: '/classes/', isPermanent: true, force: true, statusCode: 301 })
