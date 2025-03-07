@@ -56,7 +56,6 @@ function Work({data, search}) {
   function handleClear(e) {
     e.preventDefault()
     setTags(tags.map(tag=> ({...tag, checked: false})))
-    setTagMode(false)
   }
 
   // watches tags array for updates and updates the mode in case no tag is checked
