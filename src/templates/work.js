@@ -59,12 +59,15 @@ function Work({data, search}) {
     setTagMode(false)
   }
 
-  // watches tags array for updates and updates the Tag Mode in case no Tag is checked
+  // watches tags array for updates and updates the mode in case no tag is checked
+  // the or statement stops the url getting overwritten when tags load
   useEffect(()=> {
-    setTagMode(tags.filter(tag=>tag.checked).length > 0)
-    updateQuery()
+    const tagsChecked = tags.filter(tag=>tag.checked).length > 0
+    setTagMode(tagsChecked)
+    if(tagsChecked || isTagMode) updateQuery()
   }, [JSON.stringify(tags.map(tag => ({ name: tag.name, checked: tag.checked })))])
 
+  //gets tags from query
   useEffect(() => {
     if(search.tags) {
       const queryTags = search.tags.split(',')
@@ -83,8 +86,6 @@ function Work({data, search}) {
         return updatedTags;
       });
     }
-    //Run updateQuery() after setting tags on mount
-    setTimeout(() => updateQuery(), 0);
   }, [])
 
   // ==========

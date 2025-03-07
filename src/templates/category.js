@@ -54,17 +54,17 @@ function CategoryTemplate({data, search}) {
   function handleClear(e) {
     e.preventDefault()
     setTags(tags.map(tag=> ({...tag, checked: false})))
-    setTagMode(false)
   }
 
-  // watches tags array for updates and updates the Tag Mode in case no Tag is checked
+  // watches tags array for updates and updates the mode in case no tag is checked
+  // the or statement stops the url getting overwritten when tags load
   useEffect(()=> {
-    setTagMode(tags.filter(tag=>tag.checked).length > 0)
-    updateQuery()
+    const tagsChecked = tags.filter(tag=>tag.checked).length > 0
+    setTagMode(tagsChecked)
+    if(tagsChecked || isTagMode) updateQuery()
   }, [JSON.stringify(tags.map(tag => ({ name: tag.name, checked: tag.checked })))])
 
   useEffect(() => {
-    console.log('search tags is', search.tags)
     if(search.tags) {
       const queryTags = search.tags.split(',')
       setTags(prevTags => {
@@ -79,11 +79,9 @@ function CategoryTemplate({data, search}) {
           return prevTags;
         }
 
-        return updatedTags;
+      return updatedTags;
       });
     }
-    //Run updateQuery() after setting tags on mount
-    setTimeout(() => updateQuery(), 0); // this might be the issue?
   }, [])
 
   // ========== //
