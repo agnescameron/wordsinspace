@@ -24,6 +24,11 @@ exports.createPages = async ({ actions, graphql }) => {
   createRedirect({ fromPath: '/publications/NotesListsCFP.pdf', toPath: 'https://icd.wordsinspace.net/wp-content/uploads/publications/NotesListsCFP.pdf', isPermanent: true, force: true, statusCode: 301 })
   createRedirect({ fromPath: '/publications/SilentInvisibleCity.pdf', toPath: 'https://icd.wordsinspace.net/wp-content/uploads/publications/SilentInvisibleCity.pdf', isPermanent: true, force: true, statusCode: 301 })
 
+// Preserve /presentations/ and /publications/ pages
+createRedirect({ fromPath: '/presentations', toPath: '/presentations', isPermanent: false, force: true, statusCode: 200 });
+createRedirect({ fromPath: '/publications', toPath: '/publications', isPermanent: false, force: true, statusCode: 200 });
+
+
   //pages that previously had parents
   createRedirect({ fromPath: '/publications/:splat', toPath: '/:splat', isPermanent: true, force: true, statusCode: 301, queryString: true })
   createRedirect({ fromPath: '/presentations/:splat', toPath: '/:splat', isPermanent: true, force: true, statusCode: 301, queryString: true })
