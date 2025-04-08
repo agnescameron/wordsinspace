@@ -75,15 +75,16 @@ export const handlePublicationsTags = (tags, catName, pinnedTags, tagCutoff) => 
   ]
 
     //return alphabetically
-    const allTags = tags.sort((a,b) => a.name.localeCompare(b.name))
+    const allTags = [...tags].sort((a,b) => a.name.localeCompare(b.name))
 
   return {topTags: topTags, allTags: allTags}
 }
 
 export const handleRestOfTags = (tags, catName, tagCutoff) => {
 
+    console.log('cat name is', catName)
     //only use tags which appear related to this category
-    if(catName){
+    if(catName !== ''){
       tags = tags.filter(tag => {
           let inCat = false;
           tag.posts?.nodes.forEach(post => {
@@ -97,14 +98,13 @@ export const handleRestOfTags = (tags, catName, tagCutoff) => {
           return inCat;
       })
     }
-    console.log(tags.length, tagCutoff)
 
     const topTags = tags?.slice(0,tags.length < tagCutoff
       ? Math.floor(tags.length/2)
       : tagCutoff)
 
     //return alphabetically
-    const allTags = tags.sort((a,b) => a.name.localeCompare(b.name))
+    const allTags = [...tags].sort((a,b) => a.name.localeCompare(b.name))
 
 
   return {topTags: topTags, allTags: allTags}

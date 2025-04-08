@@ -10,7 +10,7 @@ import Checkbox from './checkbox'
 const Tags = ({tags, selectTags, clearTags, isTagMode}) => {
 	const [showExtra, setShowExtra] = useState(false)
   const [isHovered, setIsHovered] = useState(false)
-	const tagCutoff = 20
+	const tagCutoff = 18
 
 	const location = useLocation()
 
@@ -40,7 +40,7 @@ const Tags = ({tags, selectTags, clearTags, isTagMode}) => {
 				flex: '1 1 auto',
 	    }}>
 
-      {showExtra ? 
+      { showExtra ? 
 	      allTags.map((tag, index) => (
 					<Checkbox
 			      key={index+topTags.length}
