@@ -9,10 +9,10 @@ export const getMonthName = (index) => {
 // sorts Tags array when we are in TagMode
 export const sortTags = (tags) => {
    return tags
-            .filter(tag => tag.name.length > 0) // filter for nodes which have tags
-            .filter(hasTags => hasTags.pages.nodes.length > 0 || hasTags.posts.nodes.length > 0) // filter for nodes the Posts or Pages nodes have tags
-            .sort((a, b) => a.posts.nodes.length + a.pages.nodes.length < b.posts.nodes.length + b.pages.nodes.length ? 1 : -1) // sort DESC by the number of tags across both Posts and Pages
-            .map(obj=> ({ ...obj, checked: false })) // modify the incoming array by inserting a {checked: true | false} field to every object, which is used for selecting Tags
+      .filter(tag => tag.name.length > 0) // filter for nodes which have tags
+      .filter(hasTags => hasTags.pages.nodes.length > 0 || hasTags.posts.nodes.length > 0) // filter for nodes the Posts or Pages nodes have tags
+      .sort((a, b) => a.posts.nodes.length + a.pages.nodes.length < b.posts.nodes.length + b.pages.nodes.length ? 1 : -1) // sort DESC by the number of tags across both Posts and Pages
+      .map(obj=> ({ ...obj, checked: false })) // modify the incoming array by inserting a {checked: true | false} field to every object, which is used for selecting Tags
 }
 
 // sorts an array by date (newest to oldest)
@@ -60,7 +60,7 @@ function getRandomSubarray(arr, size) {
   return shuffled.slice(0, size);
 }
 
-export const handlePublicationsTags = (tags, pinnedTags, tagCutoff) => {
+export const handlePublicationsTags = (tags, catName, pinnedTags, tagCutoff) => {
   const pinned = tags.filter(tag => pinnedTags.includes(tag.name.toLowerCase()))
   const notPinned = tags.filter(tag => !pinnedTags.includes(tag.name.toLowerCase()))
 
@@ -74,22 +74,38 @@ export const handlePublicationsTags = (tags, pinnedTags, tagCutoff) => {
             )
   ]
 
-  // remove the PinnedTags from the rest of the tags
-  const extraTags = tags?.slice(tags.length < tagCutoff
-                    ? Math.floor(tags.length/2)
-                    : tagCutoff, tags.length)
+    //return alphabetically
+    const allTags = tags.sort((a,b) => a.name.localeCompare(b.name))
 
-  return {topTags: topTags, extraTags: extraTags}
+  return {topTags: topTags, allTags: allTags}
 }
 
-export const handleRestOfTags = (tags, tagCutoff) => {
-  const topTags = tags?.slice(0,tags.length < tagCutoff
+export const handleRestOfTags = (tags, catName, tagCutoff) => {
+
+    //only use tags which appear related to this category
+    if(catName){
+      tags = tags.filter(tag => {
+          let inCat = false;
+          tag.posts?.nodes.forEach(post => {
+            if(post.categories.nodes[0]?.name.toLowerCase() === catName) inCat = true
+          })
+
+          tag.pages?.nodes.forEach(page => {
+            if(page.categories.nodes[0]?.name.toLowerCase() === catName) inCat = true
+          })
+
+          return inCat;
+      })
+    }
+    console.log(tags.length, tagCutoff)
+
+    const topTags = tags?.slice(0,tags.length < tagCutoff
       ? Math.floor(tags.length/2)
       : tagCutoff)
 
-	const extraTags = tags?.slice(tags.length < tagCutoff
-                    ? Math.floor(tags.length/2)
-                    : tagCutoff, tags.length)
+    //return alphabetically
+    const allTags = tags.sort((a,b) => a.name.localeCompare(b.name))
 
-  return {topTags: topTags, extraTags: extraTags}
+
+  return {topTags: topTags, allTags: allTags}
 }

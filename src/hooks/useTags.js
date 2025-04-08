@@ -12,6 +12,11 @@ export const useTags = () => {
             slug
             posts {
               nodes {
+                categories {
+                  nodes {
+                    name
+                  }
+                }
                 title
                 slug
                 date
@@ -26,6 +31,11 @@ export const useTags = () => {
             }
             pages {
               nodes {
+                categories {
+                  nodes {
+                    name
+                  }
+                }
                 title
                 slug
                 date
