@@ -28,7 +28,6 @@ const CategoriesHorizontal = ({mobileNavBar, mobileBrowserLayout, catName}) => {
 	        width: 'inherit',
 	        overflow: 'auto',
 	        justifyContent: 'flex-start',
-	        marginBottom : '-5px',
 	      }}>
         <div>
           <Link to={'/work'}

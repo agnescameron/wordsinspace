@@ -59,7 +59,7 @@ const Home = ({children}) => {
         <div className={mobileHome ? '' : 'top-bar'}>
           <div style={styleTopBar}>
             <div className='interface'>
-              <Link to={'/'}>
+              <Link to={'/work'}>
                 <div
                 tabIndex={0}
                 role='button'
@@ -76,7 +76,7 @@ const Home = ({children}) => {
                     ? <GlyphLeftHover />
                     : isColophon ? <GlyphLeft /> : null
                   }
-                  <div style={{marginLeft: '5px'}}>HOME</div>
+                  <div style={{marginLeft: '5px'}}>INDEX</div>
                 </div>
               </Link>
             </div>
