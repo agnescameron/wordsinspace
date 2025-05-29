@@ -1,5 +1,5 @@
 import { useStaticQuery, graphql } from "gatsby"
-import {sortTags} from "../utils/helpers"
+import {sortTags, getCoTags} from "../utils/helpers"
 
 export const useTags = () => {
   const { allWpTag } = useStaticQuery(

@@ -1,7 +1,7 @@
 import React, {useState} from "react"
 
 import { useBreakpoint } from 'gatsby-plugin-breakpoints';
-import {useLocation} from '@reach/router'
+import {useLocation} from '@reach/router';
 
 import {getResponsiveBrowserVars} from "../../utils/dom"
 import {handlePublicationsTags, handleRestOfTags} from "../../utils/helpers"
@@ -9,7 +9,7 @@ import Checkbox from './checkbox'
 
 const Tags = ({tags, selectTags, clearTags, isTagMode}) => {
 	const [showExtra, setShowExtra] = useState(false)
-  const [isHovered, setIsHovered] = useState(false)
+	const [isHovered, setIsHovered] = useState(false)
 	const tagCutoff = 18
 
 	const location = useLocation()

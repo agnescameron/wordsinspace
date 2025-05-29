@@ -6,6 +6,10 @@ export const getMonthName = (index) => {
   return monthNames[index-1]
 }
 
+function flatten(a) {
+    return Array.isArray(a) ? [].concat(...a.map(flatten)) : a;
+}
+
 // sorts Tags array when we are in TagMode
 export const sortTags = (tags) => {
    return tags
@@ -13,6 +17,15 @@ export const sortTags = (tags) => {
       .filter(hasTags => hasTags.pages.nodes.length > 0 || hasTags.posts.nodes.length > 0) // filter for nodes the Posts or Pages nodes have tags
       .sort((a, b) => a.posts.nodes.length + a.pages.nodes.length < b.posts.nodes.length + b.pages.nodes.length ? 1 : -1) // sort DESC by the number of tags across both Posts and Pages
       .map(obj=> ({ ...obj, checked: false })) // modify the incoming array by inserting a {checked: true | false} field to every object, which is used for selecting Tags
+}
+
+// sorts Tags array when we are in TagMode
+export const getCoTags = (tags) => {
+  const coTagsPosts = tags.map(tag => tag.posts?.nodes?.map(post => post.tags?.nodes.map(node => node.slug)))
+  const coTagsPages = tags.map(tag => tag.pages?.nodes?.map(page => page.tags?.nodes.map(node => node.slug)))
+  const coTags = [...new Set(flatten(coTagsPosts.concat(coTagsPages)))];
+  console.log(coTags)
+  return tags;
 }
 
 // sorts an array by date (newest to oldest)
@@ -80,11 +93,53 @@ export const handlePublicationsTags = (tags, catName, pinnedTags, tagCutoff) => 
   return {topTags: topTags, allTags: allTags}
 }
 
+// in this function we want something that fires if a tag has been selected
+// to only return the cotags
 export const handleRestOfTags = (tags, catName, tagCutoff) => {
-
-    console.log('cat name is', catName)
     //only use tags which appear related to this category
-    if(catName !== ''){
+    // console.log('true', )
+
+    if(tags.filter(tag => tag.checked === true).length > 0) {
+      const filterTags = tags.filter(tag => tag.checked === true);
+      console.log(filterTags)
+
+      const tagsInCat = tags.filter(tag => {
+          let inCat = false;
+          tag.posts?.nodes.forEach(post => {
+            if(post.categories.nodes[0]?.name.toLowerCase() === catName) inCat = true
+          })
+
+          tag.pages?.nodes.forEach(page => {
+            if(page.categories.nodes[0]?.name.toLowerCase() === catName) inCat = true
+          })
+
+          return inCat;
+      })
+
+      const coTagsInCat = tags.map(tag => {
+          const coPost = tag.posts?.nodes.map(post => {
+            if(post.categories.nodes[0]?.name.toLowerCase() === catName) {
+              if(post.tags?.nodes?.filter(tag => tag.slug === filterTags[0].slug.toLowerCase()).length > 0)
+                return post.tags?.nodes?.map(node => {if (node.slug !== undefined) return node.slug})
+            }
+          })
+
+          const coPage = tag.pages?.nodes.map(page => {
+            if(page.categories.nodes[0]?.name.toLowerCase() === catName) {
+              if(page.tags?.nodes?.filter(tag => tag.slug === filterTags[0].slug.toLowerCase()).length > 0)
+                return page.tags?.nodes?.map(node => {if (node.slug !== undefined) return node.slug})
+            }
+          })
+          return coPost.concat(coPage)
+      })
+
+      const coTags = [...new Set(flatten(coTagsInCat))].filter(el => el !== undefined);
+      const finalTags = tagsInCat.filter(tag => coTags.includes(tag.slug.toLowerCase()))
+      console.log('cotags is', coTags, finalTags)
+      tags = finalTags;
+    }
+
+    else if(catName !== ''){
       tags = tags.filter(tag => {
           let inCat = false;
           tag.posts?.nodes.forEach(post => {
@@ -107,5 +162,5 @@ export const handleRestOfTags = (tags, catName, tagCutoff) => {
     const allTags = [...tags].sort((a,b) => a.name.localeCompare(b.name))
 
 
-  return {topTags: topTags, allTags: allTags}
+  return {topTags: tags, allTags: allTags}
 }
