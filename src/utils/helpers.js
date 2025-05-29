@@ -142,33 +142,41 @@ export const handleRestOfTags = (tags, catName, tagCutoff) => {
 
     if(tags.filter(tag => tag.checked === true).length > 0) {
       const filterTags = tags.filter(tag => tag.checked === true);
-      const tagsInCat = tags.filter(tag => {
-          let inCat = false;
-          tag.posts?.nodes.forEach(post => {
-            if(post.categories.nodes[0]?.name.toLowerCase() === catName || catName === '') inCat = true
-          })
+      let tagsInCat = tags;
 
-          tag.pages?.nodes.forEach(page => {
-            if(page.categories.nodes[0]?.name.toLowerCase() === catName || catName === '') inCat = true
-          })
+      if(catName !== ''){
+        tagsInCat = tags.filter(tag => {
+            let inCat = false;
+            tag.posts?.nodes.forEach(post => {
+              if(post.categories.nodes[0]?.name.toLowerCase() === catName) inCat = true
+            })
 
-          return inCat;
-      })
+            tag.pages?.nodes.forEach(page => {
+              if(page.categories.nodes[0]?.name.toLowerCase() === catName) inCat = true
+            })
 
-      const coTagsInCat = tags.map(tag => {
+            return inCat;
+        })
+      }
+
+      const coTagsInCat = tagsInCat.map(tag => {
           const coPost = tag.posts?.nodes.map(post => {
             if(post.categories.nodes[0]?.name.toLowerCase() === catName || catName === '') {
-              if(post.tags?.nodes?.filter(tag => tag.slug === filterTags[0].slug.toLowerCase()).length > 0)
+              if(post.tags?.nodes?.filter(tag => tag.slug.toLowerCase() === filterTags[0].slug.toLowerCase()).length > 0)
+                // console.log(post)
                 return post.tags?.nodes?.map(node => {if (node.slug !== undefined) return node.slug})
             }
           })
 
           const coPage = tag.pages?.nodes.map(page => {
             if(page.categories.nodes[0]?.name.toLowerCase() === catName || catName === '') {
-              if(page.tags?.nodes?.filter(tag => tag.slug === filterTags[0].slug.toLowerCase()).length > 0)
+              if(page.tags?.nodes?.filter(tag => tag.slug.toLowerCase() === filterTags[0].slug.toLowerCase()).length > 0)
+                // console.log(page)
                 return page.tags?.nodes?.map(node => {if (node.slug !== undefined) return node.slug})
             }
           })
+
+          // console.log(coPost, coPage)
           return coPost.concat(coPage)
       })
 
