@@ -24,7 +24,7 @@ export const getCoTags = (tags) => {
   const coTagsPosts = tags.map(tag => tag.posts?.nodes?.map(post => post.tags?.nodes.map(node => node.slug)))
   const coTagsPages = tags.map(tag => tag.pages?.nodes?.map(page => page.tags?.nodes.map(node => node.slug)))
   const coTags = [...new Set(flatten(coTagsPosts.concat(coTagsPages)))];
-  console.log(coTags)
+
   return tags;
 }
 
@@ -113,7 +113,6 @@ export const handlePublicationsTags = (tags, catName, pinnedTags, tagCutoff) => 
       topTags = finalTags;
   }
 
-  // console.log('pinned', pinned, notPinned)
   else {
     const pinned = tags.filter(tag => pinnedTags.includes(tag.name.toLowerCase()))
     let notPinned = tags.filter(tag => !pinnedTags.includes(tag.name.toLowerCase()))
@@ -138,8 +137,6 @@ export const handlePublicationsTags = (tags, catName, pinnedTags, tagCutoff) => 
 // in this function we want something that fires if a tag has been selected
 // to only return the cotags
 export const handleRestOfTags = (tags, catName, tagCutoff) => {
-    console.log('catname is', catName)
-
     if(tags.filter(tag => tag.checked === true).length > 0) {
       const filterTags = tags.filter(tag => tag.checked === true);
       let tagsInCat = tags;
@@ -163,7 +160,6 @@ export const handleRestOfTags = (tags, catName, tagCutoff) => {
           const coPost = tag.posts?.nodes.map(post => {
             if(post.categories?.nodes[0]?.name.toLowerCase() === catName || catName === '') {
               if(post.tags?.nodes?.filter(tag => tag.slug.toLowerCase() === filterTags[0].slug.toLowerCase()).length > 0)
-                // console.log(post)
                 return post.tags?.nodes?.map(node => {if (node.slug !== undefined) return node.slug})
             }
           })
@@ -171,12 +167,9 @@ export const handleRestOfTags = (tags, catName, tagCutoff) => {
           const coPage = tag.pages?.nodes.map(page => {
             if(page.categories?.nodes[0]?.name.toLowerCase() === catName || catName === '') {
               if(page.tags?.nodes?.filter(tag => tag.slug.toLowerCase() === filterTags[0].slug.toLowerCase()).length > 0)
-                // console.log(page)
                 return page.tags?.nodes?.map(node => {if (node.slug !== undefined) return node.slug})
             }
           })
-
-          // console.log(coPost, coPage)
           return coPost.concat(coPage)
       })
 
