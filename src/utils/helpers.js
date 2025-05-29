@@ -37,7 +37,7 @@ export const sortByDate = (array) => {
 
 // extracts and sorts the search results from what the Apollo useQuery returns
 export const extractSearchResults = (array) => {
-  let results = array.categories.nodes
+  let results = array.categories?.nodes
                .filter(cat=> cat.pages.nodes.length >0 || cat.posts.nodes.length >0)
                .map(nonEmptyCat => {
                   return [...nonEmptyCat.pages.nodes, ...nonEmptyCat.posts.nodes]
@@ -81,11 +81,11 @@ export const handlePublicationsTags = (tags, catName, pinnedTags, tagCutoff) => 
       const tagsInCat = tags.filter(tag => {
           let inCat = false;
           tag.posts?.nodes.forEach(post => {
-            if(post.categories.nodes[0]?.name.toLowerCase() === catName) inCat = true
+            if(post.categories?.nodes[0]?.name.toLowerCase() === catName) inCat = true
           })
 
           tag.pages?.nodes.forEach(page => {
-            if(page.categories.nodes[0]?.name.toLowerCase() === catName) inCat = true
+            if(page.categories?.nodes[0]?.name.toLowerCase() === catName) inCat = true
           })
 
           return inCat;
@@ -93,14 +93,14 @@ export const handlePublicationsTags = (tags, catName, pinnedTags, tagCutoff) => 
 
       const coTagsInCat = tags.map(tag => {
           const coPost = tag.posts?.nodes.map(post => {
-            if(post.categories.nodes[0]?.name.toLowerCase() === catName) {
+            if(post.categories?.nodes[0]?.name.toLowerCase() === catName) {
               if(post.tags?.nodes?.filter(tag => tag.slug === filterTags[0].slug.toLowerCase()).length > 0)
                 return post.tags?.nodes?.map(node => {if (node.slug !== undefined) return node.slug})
             }
           })
 
           const coPage = tag.pages?.nodes.map(page => {
-            if(page.categories.nodes[0]?.name.toLowerCase() === catName) {
+            if(page.categories?.nodes[0]?.name.toLowerCase() === catName) {
               if(page.tags?.nodes?.filter(tag => tag.slug === filterTags[0].slug.toLowerCase()).length > 0)
                 return page.tags?.nodes?.map(node => {if (node.slug !== undefined) return node.slug})
             }
@@ -148,11 +148,11 @@ export const handleRestOfTags = (tags, catName, tagCutoff) => {
         tagsInCat = tags.filter(tag => {
             let inCat = false;
             tag.posts?.nodes.forEach(post => {
-              if(post.categories.nodes[0]?.name.toLowerCase() === catName) inCat = true
+              if(post.categories?.nodes[0]?.name.toLowerCase() === catName) inCat = true
             })
 
             tag.pages?.nodes.forEach(page => {
-              if(page.categories.nodes[0]?.name.toLowerCase() === catName) inCat = true
+              if(page.categories?.nodes[0]?.name.toLowerCase() === catName) inCat = true
             })
 
             return inCat;
@@ -161,7 +161,7 @@ export const handleRestOfTags = (tags, catName, tagCutoff) => {
 
       const coTagsInCat = tagsInCat.map(tag => {
           const coPost = tag.posts?.nodes.map(post => {
-            if(post.categories.nodes[0]?.name.toLowerCase() === catName || catName === '') {
+            if(post.categories?.nodes[0]?.name.toLowerCase() === catName || catName === '') {
               if(post.tags?.nodes?.filter(tag => tag.slug.toLowerCase() === filterTags[0].slug.toLowerCase()).length > 0)
                 // console.log(post)
                 return post.tags?.nodes?.map(node => {if (node.slug !== undefined) return node.slug})
@@ -169,7 +169,7 @@ export const handleRestOfTags = (tags, catName, tagCutoff) => {
           })
 
           const coPage = tag.pages?.nodes.map(page => {
-            if(page.categories.nodes[0]?.name.toLowerCase() === catName || catName === '') {
+            if(page.categories?.nodes[0]?.name.toLowerCase() === catName || catName === '') {
               if(page.tags?.nodes?.filter(tag => tag.slug.toLowerCase() === filterTags[0].slug.toLowerCase()).length > 0)
                 // console.log(page)
                 return page.tags?.nodes?.map(node => {if (node.slug !== undefined) return node.slug})
@@ -189,11 +189,11 @@ export const handleRestOfTags = (tags, catName, tagCutoff) => {
       tags = tags.filter(tag => {
           let inCat = false;
           tag.posts?.nodes.forEach(post => {
-            if(post.categories.nodes[0]?.name.toLowerCase() === catName) inCat = true
+            if(post.categories?.nodes[0]?.name.toLowerCase() === catName) inCat = true
           })
 
           tag.pages?.nodes.forEach(page => {
-            if(page.categories.nodes[0]?.name.toLowerCase() === catName) inCat = true
+            if(page.categories?.nodes[0]?.name.toLowerCase() === catName) inCat = true
           })
 
           return inCat;
