@@ -19,8 +19,8 @@ const ListItem = ({item, isTagMode, invertedTheme, mobileList, listWidth, listTi
     e.preventDefault()
 
     const fetchedImage = item?.featuredImage?.node?.localFile?.childImageSharp
-    if (!fetchedImage) {
-      console.error("could not fetch image", item.toString())
+    if (!fetchedImage && !isTagMode) {
+      console.error("could not fetch image", fetchedImage)
       return
     }
     setIsVisible(true)
