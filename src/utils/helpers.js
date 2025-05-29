@@ -74,35 +74,10 @@ function getRandomSubarray(arr, size) {
 }
 
 export const handlePublicationsTags = (tags, catName, pinnedTags, tagCutoff) => {
-  const pinned = tags.filter(tag => pinnedTags.includes(tag.name.toLowerCase()))
-  const notPinned = tags.filter(tag => !pinnedTags.includes(tag.name.toLowerCase()))
+  let topTags = []
 
-  const topTags = [
-    // filter by names in pinnedTags to bump these specific tags to top
-    ...pinned,
-    // rest of tags
-    ...notPinned?.slice(0,tags.length < tagCutoff - pinned.length
-            ? Math.floor(tags.length/2)
-            : tagCutoff  - pinned.length
-            )
-  ]
-
-    //return alphabetically
-    const allTags = [...tags].sort((a,b) => a.name.localeCompare(b.name))
-
-  return {topTags: topTags, allTags: allTags}
-}
-
-// in this function we want something that fires if a tag has been selected
-// to only return the cotags
-export const handleRestOfTags = (tags, catName, tagCutoff) => {
-    //only use tags which appear related to this category
-    // console.log('true', )
-
-    if(tags.filter(tag => tag.checked === true).length > 0) {
+  if(tags.filter(tag => tag.checked === true).length > 0) {
       const filterTags = tags.filter(tag => tag.checked === true);
-      console.log(filterTags)
-
       const tagsInCat = tags.filter(tag => {
           let inCat = false;
           tag.posts?.nodes.forEach(post => {
@@ -135,7 +110,70 @@ export const handleRestOfTags = (tags, catName, tagCutoff) => {
 
       const coTags = [...new Set(flatten(coTagsInCat))].filter(el => el !== undefined);
       const finalTags = tagsInCat.filter(tag => coTags.includes(tag.slug.toLowerCase()))
-      console.log('cotags is', coTags, finalTags)
+      topTags = finalTags;
+  }
+
+  // console.log('pinned', pinned, notPinned)
+  else {
+    const pinned = tags.filter(tag => pinnedTags.includes(tag.name.toLowerCase()))
+    let notPinned = tags.filter(tag => !pinnedTags.includes(tag.name.toLowerCase()))
+
+    topTags = [
+      // filter by names in pinnedTags to bump these specific tags to top
+      ...pinned,
+      // rest of tags
+      ...notPinned?.slice(0,tags.length < tagCutoff - pinned.length
+              ? Math.floor(tags.length/2)
+              : tagCutoff  - pinned.length
+              )
+    ]
+  }
+
+    //return alphabetically
+    const allTags = [...tags].sort((a,b) => a.name.localeCompare(b.name))
+
+  return {topTags: topTags, allTags: allTags}
+}
+
+// in this function we want something that fires if a tag has been selected
+// to only return the cotags
+export const handleRestOfTags = (tags, catName, tagCutoff) => {
+    console.log('catname is', catName)
+
+    if(tags.filter(tag => tag.checked === true).length > 0) {
+      const filterTags = tags.filter(tag => tag.checked === true);
+      const tagsInCat = tags.filter(tag => {
+          let inCat = false;
+          tag.posts?.nodes.forEach(post => {
+            if(post.categories.nodes[0]?.name.toLowerCase() === catName || catName === '') inCat = true
+          })
+
+          tag.pages?.nodes.forEach(page => {
+            if(page.categories.nodes[0]?.name.toLowerCase() === catName || catName === '') inCat = true
+          })
+
+          return inCat;
+      })
+
+      const coTagsInCat = tags.map(tag => {
+          const coPost = tag.posts?.nodes.map(post => {
+            if(post.categories.nodes[0]?.name.toLowerCase() === catName || catName === '') {
+              if(post.tags?.nodes?.filter(tag => tag.slug === filterTags[0].slug.toLowerCase()).length > 0)
+                return post.tags?.nodes?.map(node => {if (node.slug !== undefined) return node.slug})
+            }
+          })
+
+          const coPage = tag.pages?.nodes.map(page => {
+            if(page.categories.nodes[0]?.name.toLowerCase() === catName || catName === '') {
+              if(page.tags?.nodes?.filter(tag => tag.slug === filterTags[0].slug.toLowerCase()).length > 0)
+                return page.tags?.nodes?.map(node => {if (node.slug !== undefined) return node.slug})
+            }
+          })
+          return coPost.concat(coPage)
+      })
+
+      const coTags = [...new Set(flatten(coTagsInCat))].filter(el => el !== undefined);
+      const finalTags = tagsInCat.filter(tag => coTags.includes(tag.slug.toLowerCase()))
       tags = finalTags;
     }
 
