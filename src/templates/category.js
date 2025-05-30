@@ -46,7 +46,9 @@ function CategoryTemplate({data, search}) {
 
   // handles clicking on Tags by updating the 'checked' key-value for every tag
   function handleSelection(e) {
+    console.log('targert is', e.target)
     const { name } = e.target;
+    console.log('handling selection')
     setTags(tags.map(tag => tag.name.replace(/[\n\s]/, '-') === name.replace(/[\n\s]/, '-') ? {...tag, checked: !tag.checked } : tag))
   }
 
@@ -103,9 +105,13 @@ function CategoryTemplate({data, search}) {
       {showMobileFilters &&
         <MobileFilters />
       }
+      {/*somehow working in filters but not in list!!!*/}
       <List
-        items={isTagMode ? tagQueryResults : initial} loading={response.loading}
-        isTagMode={isTagMode}/>
+        items={isTagMode ? tagQueryResults : initial} 
+        loading={response.loading}
+        isTagMode={isTagMode} 
+        selectTags={handleSelection} 
+        clearTags={handleClear} />
       {showDesktopFilters &&
         <Filters
           tags={tags}

@@ -11,10 +11,11 @@ import Glyph_scrollup from '../images/assets/glyph_scrollup.svg'
 
 import ListItem from "./list/listItem"
 
-const List = ({loading, items, isTagMode}) => {
+const List = ({loading, items, selectTags, clearTags, isTagMode}) => {
   const breakpoints = useBreakpoint()
   const {mobileList, listWidth, listTitleWidth} = getResponsiveBrowserVars(breakpoints)
 
+  console.log('in list selectTags', selectTags)
   const ulScrollRestoration = useScrollRestoration(`list-component-ul-list`)
 
   function handleScrollTop() {
@@ -98,6 +99,8 @@ const List = ({loading, items, isTagMode}) => {
                 invertedTheme={false}
                 listWidth={listWidth}
                 listTitleWidth={listTitleWidth}
+                selectTags={selectTags}
+                clearTags={clearTags}
                 />
             )) : <li>no results found</li> }
           </ul>

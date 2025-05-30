@@ -6,7 +6,7 @@ import ListDate from "./listDate"
 import ListImage from "./listImage"
 import ListCategory from "./listCategory"
 
-const ListItem = ({item, isTagMode, invertedTheme, mobileList, listWidth, listTitleWidth}) => {
+const ListItem = ({item, isTagMode, invertedTheme, mobileList, listWidth, listTitleWidth, selectTags, clearTags}) => {
   const category=item?.categories?.nodes[0]?.name
   const categoryClass = item?.categories?.nodes[0]?.name.toLowerCase()
   const tags = item?.tags
@@ -81,7 +81,8 @@ const ListItem = ({item, isTagMode, invertedTheme, mobileList, listWidth, listTi
           }}>
           {date && <ListDate date={date} invertedTheme={invertedTheme} />}
           {category && category !== 'Uncategorized' && <ListCategory category={category.toLowerCase()} />}
-          {tags && !mobileList && <ListTag tags={tags} invertedTheme={invertedTheme} />}
+          {tags && !mobileList && <ListTag  selectTags={selectTags}
+                clearTags={clearTags} tags={tags} invertedTheme={invertedTheme} />}
         </div>
 
         {/* ==================== Title ====================  */}
