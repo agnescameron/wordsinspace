@@ -104,14 +104,19 @@ const getCoOccurringTags = (tags, filterTags, catName) => {
   });
   
   // Find intersection of all co-tag sets
+  console.log(coTagSetsPerFilter)
+  if (coTagSetsPerFilter.length === 0) return [];
   if (coTagSetsPerFilter.length === 1) {
     return Array.from(coTagSetsPerFilter[0]);
   }
   
-  // Start with first set and find intersection with all others
-  let intersection = coTagSetsPerFilter[0];
+  // Find tags that appear in ALL sets (intersection)
+  let intersection = new Set(coTagSetsPerFilter[0]);
+  
   for (let i = 1; i < coTagSetsPerFilter.length; i++) {
-    intersection = new Set([...intersection].filter(slug => coTagSetsPerFilter[i].has(slug)));
+    const currentSet = coTagSetsPerFilter[i];
+    // Keep only items that exist in both the current intersection and the current set
+    intersection = new Set([...intersection].filter(slug => currentSet.has(slug)));
   }
   
   return Array.from(intersection);

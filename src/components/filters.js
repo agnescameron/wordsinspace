@@ -4,7 +4,6 @@ import TagsInfoBox from '../components/filters/tagsInfoBox'
 import Tags from "./filters/tags"
 
 const Filters = ({tags, selectTags, clearTags, isTagMode}) => {
-  console.log('in filters selectTags', selectTags)
   return (
     <div className="filterBar"
       style={{
