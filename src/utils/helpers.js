@@ -127,7 +127,8 @@ export const handleTags = (tags, catName = '', pinnedTags = [], tagCutoff = 10) 
   // If tags are selected, filter by co-occurring tags
   if (checkedTags.length > 0) {
     const tagsInCategory = catName ? tags.filter(tag => isTagInCategory(tag, catName)) : tags;
-    const coOccurringTagSlugs = getCoOccurringTags(tagsInCategory, checkedTags, catName);
+    const coOccurringTagSlugs = getCoOccurringTags(tags, checkedTags, catName);
+    // Filter to only tags that are both in category AND co-occurring
     filteredTags = tagsInCategory.filter(tag => 
       coOccurringTagSlugs.includes(tag.slug) || tag.checked === true
     );
