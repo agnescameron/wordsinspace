@@ -89,45 +89,29 @@ const getCoOccurringTags = (tags, filterTags, catName) => {
   if (filterTags.length === 0) return [];
   
   // Get co-occurring tags for each filter tag
-  const coTagSetsPerFilter = filterTags.map(filterTag => {
-    const coTagSlugs = new Set();
-    
-    tags.forEach(tag => {
-      const processNodes = (nodes) => {
-        nodes?.forEach(item => {
-          const matchesCategory = !catName || item.categories?.nodes[0]?.name.toLowerCase() === catName;
-          const hasFilterTag = item.tags?.nodes?.some(t => t.slug.toLowerCase() === filterTag.slug.toLowerCase());
-          
-          if (matchesCategory && hasFilterTag) {
-            item.tags?.nodes?.forEach(node => {
-              if (node.slug) coTagSlugs.add(node.slug);
-            });
-          }
+  const coTagSlugs = new Set();
+
+  // need to check that only tags from pages with all selected tags are returned
+  const processNodes = (nodes) => {
+    nodes?.forEach(item => {
+      const matchesCategory = catName === "" || item.categories?.nodes[0]?.name.toLowerCase() === catName;
+      const hasFilterTags = filterTags.every(t => item.tags?.nodes?.map(n => n.slug?.toLowerCase()).includes(t.slug.toLowerCase()))//item.tags?.nodes?.map(n => n.slug?.toLowerCase()).includes(t.slug.toLowerCase()));
+      console.log(item.tags?.nodes?.map(n => n.slug?.toLowerCase()), filterTags, hasFilterTags, matchesCategory)
+
+      if (matchesCategory && hasFilterTags) {
+        item.tags?.nodes?.forEach(node => {
+          if (node.slug) coTagSlugs.add(node.slug);
         });
-      };
-      
-      processNodes(tag.posts?.nodes);
-      processNodes(tag.pages?.nodes);
+      }
     });
-    
-    return coTagSlugs;
-  });
+  };
   
-  // Find intersection of all co-tag sets
-  if (coTagSetsPerFilter.length === 0) return [];
-  if (coTagSetsPerFilter.length === 1) {
-    return Array.from(coTagSetsPerFilter[0]);
-  }
-  
-  // Find tags that appear in ALL sets (intersection)
-  let intersection = new Set(coTagSetsPerFilter[0]);
-  
-  for (let i = 1; i < coTagSetsPerFilter.length; i++) {
-    const currentSet = coTagSetsPerFilter[i];
-    // Keep only items that exist in both the current intersection and the current set
-    intersection = new Set([...intersection].filter(slug => currentSet.has(slug)));
-  }
-  
+  processNodes(filterTags[0].posts?.nodes);
+  processNodes(filterTags[0].pages?.nodes);
+
+  let intersection = new Set(coTagSlugs);
+
+  console.log(Array.from(intersection))
   return Array.from(intersection);
 };
 
