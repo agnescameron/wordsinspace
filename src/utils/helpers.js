@@ -96,7 +96,7 @@ const getCoOccurringTags = (tags, filterTags, catName) => {
     nodes?.forEach(item => {
       const matchesCategory = catName === "" || item.categories?.nodes[0]?.name.toLowerCase() === catName;
       const hasFilterTags = filterTags.every(t => item.tags?.nodes?.map(n => n.slug?.toLowerCase()).includes(t.slug.toLowerCase()))//item.tags?.nodes?.map(n => n.slug?.toLowerCase()).includes(t.slug.toLowerCase()));
-      console.log(item.tags?.nodes?.map(n => n.slug?.toLowerCase()), filterTags, hasFilterTags, matchesCategory)
+      console.log(item.tags?.nodes?.map(n => n.slug?.toLowerCase()), filterTags, hasFilterTags, matchesCategory, catName, item.categories?.nodes[0]?.name.toLowerCase())
 
       if (matchesCategory && hasFilterTags) {
         item.tags?.nodes?.forEach(node => {
