@@ -60,12 +60,26 @@ function getRandomSubarray(arr, size) {
   return shuffled.slice(0, size);
 }
 
+// Constants for performance
+const VALID_CATEGORIES = new Set(['publications', 'projects', 'presentations', 'blog', 'classes']);
+
 // Helper function to check if a tag belongs to a category
 const isTagInCategory = (tag, catName) => {
-  if (catName === '') return true;
+  if (!catName || catName === '') {
+    // For 'all', check if tag has content in any valid category
+    const checkNodes = (nodes) => 
+      nodes?.some(item => {
+        const itemCategory = item.categories?.nodes[0]?.name.toLowerCase();
+        return itemCategory && VALID_CATEGORIES.has(itemCategory);
+      });
+    
+    return checkNodes(tag.posts?.nodes) || checkNodes(tag.pages?.nodes);
+  }
   
+  // For specific category, check if tag has content in that category
+  const targetCategory = catName.toLowerCase();
   const checkNodes = (nodes) => 
-    nodes?.some(item => item.categories?.nodes[0]?.name.toLowerCase() === catName);
+    nodes?.some(item => item.categories?.nodes[0]?.name.toLowerCase() === targetCategory);
   
   return checkNodes(tag.posts?.nodes) || checkNodes(tag.pages?.nodes);
 };
@@ -81,15 +95,12 @@ const getCoOccurringTags = (tags, filterTags, catName) => {
     tags.forEach(tag => {
       const processNodes = (nodes) => {
         nodes?.forEach(item => {
-          const matchesCategory = catName === '' || item.categories?.nodes[0]?.name.toLowerCase() === catName;
+          const matchesCategory = !catName || item.categories?.nodes[0]?.name.toLowerCase() === catName;
           const hasFilterTag = item.tags?.nodes?.some(t => t.slug.toLowerCase() === filterTag.slug.toLowerCase());
           
           if (matchesCategory && hasFilterTag) {
             item.tags?.nodes?.forEach(node => {
-              if (node.slug){
-                 coTagSlugs.add(node.slug);
-                 console.log(item.title)
-              }
+              if (node.slug) coTagSlugs.add(node.slug);
             });
           }
         });
@@ -103,7 +114,6 @@ const getCoOccurringTags = (tags, filterTags, catName) => {
   });
   
   // Find intersection of all co-tag sets
-  console.log(coTagSetsPerFilter)
   if (coTagSetsPerFilter.length === 0) return [];
   if (coTagSetsPerFilter.length === 1) {
     return Array.from(coTagSetsPerFilter[0]);
