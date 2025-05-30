@@ -19,15 +19,6 @@ export const sortTags = (tags) => {
       .map(obj=> ({ ...obj, checked: false })) // modify the incoming array by inserting a {checked: true | false} field to every object, which is used for selecting Tags
 }
 
-// sorts Tags array when we are in TagMode
-export const getCoTags = (tags) => {
-  const coTagsPosts = tags.map(tag => tag.posts?.nodes?.map(post => post.tags?.nodes.map(node => node.slug)))
-  const coTagsPages = tags.map(tag => tag.pages?.nodes?.map(page => page.tags?.nodes.map(node => node.slug)))
-  const coTags = [...new Set(flatten(coTagsPosts.concat(coTagsPages)))];
-
-  return tags;
-}
-
 // sorts an array by date (newest to oldest)
 export const sortByDate = (array) => {
   return array.sort((a,b)=> {
@@ -73,133 +64,104 @@ function getRandomSubarray(arr, size) {
   return shuffled.slice(0, size);
 }
 
-export const handlePublicationsTags = (tags, catName, pinnedTags, tagCutoff) => {
-  let topTags = []
+// Helper function to check if a tag belongs to a category
+const isTagInCategory = (tag, catName) => {
+  if (!catName) return true;
+  
+  const checkNodes = (nodes) => 
+    nodes?.some(item => item.categories?.nodes[0]?.name.toLowerCase() === catName);
+  
+  return checkNodes(tag.posts?.nodes) || checkNodes(tag.pages?.nodes);
+};
 
-  if(tags.filter(tag => tag.checked === true).length > 0) {
-      const filterTags = tags.filter(tag => tag.checked === true);
-      const tagsInCat = tags.filter(tag => {
-          let inCat = false;
-          tag.posts?.nodes.forEach(post => {
-            if(post.categories?.nodes[0]?.name.toLowerCase() === catName) inCat = true
-          })
-
-          tag.pages?.nodes.forEach(page => {
-            if(page.categories?.nodes[0]?.name.toLowerCase() === catName) inCat = true
-          })
-
-          return inCat;
-      })
-
-      const coTagsInCat = tags.map(tag => {
-          const coPost = tag.posts?.nodes.map(post => {
-            if(post.categories?.nodes[0]?.name.toLowerCase() === catName) {
-              if(post.tags?.nodes?.filter(tag => tag.slug === filterTags[0].slug.toLowerCase()).length > 0)
-                return post.tags?.nodes?.map(node => {if (node.slug !== undefined) return node.slug})
-            }
-          })
-
-          const coPage = tag.pages?.nodes.map(page => {
-            if(page.categories?.nodes[0]?.name.toLowerCase() === catName) {
-              if(page.tags?.nodes?.filter(tag => tag.slug === filterTags[0].slug.toLowerCase()).length > 0)
-                return page.tags?.nodes?.map(node => {if (node.slug !== undefined) return node.slug})
-            }
-          })
-          return coPost.concat(coPage)
-      })
-
-      const coTags = [...new Set(flatten(coTagsInCat))].filter(el => el !== undefined);
-      const finalTags = tagsInCat.filter(tag => coTags.includes(tag.slug.toLowerCase()))
-      topTags = finalTags;
+// Helper function to get tags that co-occur with ALL selected tags
+const getCoOccurringTags = (tags, filterTags, catName) => {
+  if (filterTags.length === 0) return [];
+  
+  // Get co-occurring tags for each filter tag
+  const coTagSetsPerFilter = filterTags.map(filterTag => {
+    const coTagSlugs = new Set();
+    
+    tags.forEach(tag => {
+      const processNodes = (nodes) => {
+        nodes?.forEach(item => {
+          const matchesCategory = !catName || item.categories?.nodes[0]?.name.toLowerCase() === catName;
+          const hasFilterTag = item.tags?.nodes?.some(t => t.slug.toLowerCase() === filterTag.slug.toLowerCase());
+          
+          if (matchesCategory && hasFilterTag) {
+            item.tags?.nodes?.forEach(node => {
+              if (node.slug) coTagSlugs.add(node.slug);
+            });
+          }
+        });
+      };
+      
+      processNodes(tag.posts?.nodes);
+      processNodes(tag.pages?.nodes);
+    });
+    
+    return coTagSlugs;
+  });
+  
+  // Find intersection of all co-tag sets
+  if (coTagSetsPerFilter.length === 1) {
+    return Array.from(coTagSetsPerFilter[0]);
   }
-
-  else {
-    const pinned = tags.filter(tag => pinnedTags.includes(tag.name.toLowerCase()))
-    let notPinned = tags.filter(tag => !pinnedTags.includes(tag.name.toLowerCase()))
-
-    topTags = [
-      // filter by names in pinnedTags to bump these specific tags to top
-      ...pinned,
-      // rest of tags
-      ...notPinned?.slice(0,tags.length < tagCutoff - pinned.length
-              ? Math.floor(tags.length/2)
-              : tagCutoff  - pinned.length
-              )
-    ]
+  
+  // Start with first set and find intersection with all others
+  let intersection = coTagSetsPerFilter[0];
+  for (let i = 1; i < coTagSetsPerFilter.length; i++) {
+    intersection = new Set([...intersection].filter(slug => coTagSetsPerFilter[i].has(slug)));
   }
+  
+  return Array.from(intersection);
+};
 
-    //return alphabetically
-    const allTags = [...tags].sort((a,b) => a.name.localeCompare(b.name))
-
-  return {topTags: topTags, allTags: allTags}
-}
-
-// in this function we want something that fires if a tag has been selected
-// to only return the cotags
-export const handleRestOfTags = (tags, catName, tagCutoff) => {
-    if(tags.filter(tag => tag.checked === true).length > 0) {
-      const filterTags = tags.filter(tag => tag.checked === true);
-      let tagsInCat = tags;
-
-      if(catName !== ''){
-        tagsInCat = tags.filter(tag => {
-            let inCat = false;
-            tag.posts?.nodes.forEach(post => {
-              if(post.categories?.nodes[0]?.name.toLowerCase() === catName) inCat = true
-            })
-
-            tag.pages?.nodes.forEach(page => {
-              if(page.categories?.nodes[0]?.name.toLowerCase() === catName) inCat = true
-            })
-
-            return inCat;
-        })
-      }
-
-      const coTagsInCat = tagsInCat.map(tag => {
-          const coPost = tag.posts?.nodes.map(post => {
-            if(post.categories?.nodes[0]?.name.toLowerCase() === catName || catName === '') {
-              if(post.tags?.nodes?.filter(tag => tag.slug.toLowerCase() === filterTags[0].slug.toLowerCase()).length > 0)
-                return post.tags?.nodes?.map(node => {if (node.slug !== undefined) return node.slug})
-            }
-          })
-
-          const coPage = tag.pages?.nodes.map(page => {
-            if(page.categories?.nodes[0]?.name.toLowerCase() === catName || catName === '') {
-              if(page.tags?.nodes?.filter(tag => tag.slug.toLowerCase() === filterTags[0].slug.toLowerCase()).length > 0)
-                return page.tags?.nodes?.map(node => {if (node.slug !== undefined) return node.slug})
-            }
-          })
-          return coPost.concat(coPage)
-      })
-
-      const coTags = [...new Set(flatten(coTagsInCat))].filter(el => el !== undefined);
-      const finalTags = tagsInCat.filter(tag => coTags.includes(tag.slug.toLowerCase()))
-      tags = finalTags;
+// Main function to handle tag filtering and sorting
+export const handleTags = (tags, catName = '', pinnedTags = [], tagCutoff = 10) => {
+  const checkedTags = tags.filter(tag => tag.checked === true);
+  const allTags = [...tags].sort((a, b) => a.name.localeCompare(b.name));
+  
+  let filteredTags = tags;
+  
+  // If tags are selected, filter by co-occurring tags
+  if (checkedTags.length > 0) {
+    const tagsInCategory = catName ? tags.filter(tag => isTagInCategory(tag, catName)) : tags;
+    const coOccurringTagSlugs = getCoOccurringTags(tagsInCategory, checkedTags, catName);
+    filteredTags = tagsInCategory.filter(tag => 
+      coOccurringTagSlugs.includes(tag.slug) || tag.checked === true
+    );
+  }
+  // If no tags selected but category specified, filter by category
+  else if (catName) {
+    filteredTags = tags.filter(tag => isTagInCategory(tag, catName));
+  }
+  
+  let topTags;
+  
+  // Handle pinned tags only when no tags are checked and we have pinned tags
+  if (checkedTags.length === 0 && pinnedTags.length > 0) {
+    const pinned = filteredTags.filter(tag => pinnedTags.includes(tag.name.toLowerCase()));
+    const notPinned = filteredTags.filter(tag => !pinnedTags.includes(tag.name.toLowerCase()));
+    const remainingSlots = tagCutoff - pinned.length;
+    const notPinnedLimit = Math.min(
+      remainingSlots,
+      filteredTags.length < tagCutoff ? Math.floor(filteredTags.length / 2) : remainingSlots
+    );
+    
+    topTags = [...pinned, ...notPinned.slice(0, notPinnedLimit)];
+  } else {
+    // For checked tags, return all filtered tags (no cutoff)
+    // For no pinned tags scenario, apply cutoff
+    if (checkedTags.length > 0) {
+      topTags = filteredTags;
+    } else {
+      const limit = filteredTags.length < tagCutoff 
+        ? Math.floor(filteredTags.length / 2) 
+        : tagCutoff;
+      topTags = filteredTags.slice(0, limit);
     }
-
-    else if(catName !== ''){
-      tags = tags.filter(tag => {
-          let inCat = false;
-          tag.posts?.nodes.forEach(post => {
-            if(post.categories?.nodes[0]?.name.toLowerCase() === catName) inCat = true
-          })
-
-          tag.pages?.nodes.forEach(page => {
-            if(page.categories?.nodes[0]?.name.toLowerCase() === catName) inCat = true
-          })
-
-          return inCat;
-      })
-    }
-
-    const topTags = tags?.slice(0,tags.length < tagCutoff
-      ? Math.floor(tags.length/2)
-      : tagCutoff)
-
-    //return alphabetically
-    const allTags = [...tags].sort((a,b) => a.name.localeCompare(b.name))
-
-
-  return {topTags: tags, allTags: allTags}
-}
+  }
+  
+  return { topTags, allTags };
+};

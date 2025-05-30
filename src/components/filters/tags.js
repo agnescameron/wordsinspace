@@ -4,7 +4,7 @@ import { useBreakpoint } from 'gatsby-plugin-breakpoints';
 import {useLocation} from '@reach/router';
 
 import {getResponsiveBrowserVars} from "../../utils/dom"
-import {handlePublicationsTags, handleRestOfTags} from "../../utils/helpers"
+import {handleTags} from "../../utils/helpers"
 import Checkbox from './checkbox'
 
 const Tags = ({tags, selectTags, clearTags, isTagMode}) => {
@@ -22,8 +22,8 @@ const Tags = ({tags, selectTags, clearTags, isTagMode}) => {
 	const pinnedTags = ['books', 'articles', 'chapters', 'reviews', 'editorial']
 
 	const {topTags, allTags} = (catName === 'publications')
-								? handlePublicationsTags(tags, catName, pinnedTags, tagCutoff)
-								: handleRestOfTags(tags, catName, tagCutoff)
+								? handleTags(tags, catName, pinnedTags, tagCutoff)
+								: handleTags(tags, catName, [], tagCutoff)
 
 	const breakpoints = useBreakpoint()
 	const {mobileBrowserLayout} = getResponsiveBrowserVars(breakpoints)
