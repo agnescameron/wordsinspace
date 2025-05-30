@@ -7,15 +7,15 @@ const CheckTag = ({ count, label, isSelected, invertedTheme, onCheckboxChange}) 
       <label
         style={{
           textAlign: 'left',
-          display: 'inline-block'
-          // wordWrap: 'break-word'
+          display: 'inline-block',
+          paddingLeft: "20px",
         }}
         className={isSelected ? 'tag tag-active' : 'tag'}
         >
         <input
           style={{
             height: '0px',
-            display: 'inline-block'
+            display: 'inline-block',
           }}
           className={invertedTheme ? 'tag tag-inverted' : 'tag'}
           type="checkbox"

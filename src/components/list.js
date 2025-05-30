@@ -14,8 +14,6 @@ import ListItem from "./list/listItem"
 const List = ({loading, items, selectTags, clearTags, isTagMode}) => {
   const breakpoints = useBreakpoint()
   const {mobileList, listWidth, listTitleWidth} = getResponsiveBrowserVars(breakpoints)
-
-  console.log('in list selectTags', selectTags)
   const ulScrollRestoration = useScrollRestoration(`list-component-ul-list`)
 
   function handleScrollTop() {
