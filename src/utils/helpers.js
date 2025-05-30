@@ -66,7 +66,7 @@ function getRandomSubarray(arr, size) {
 
 // Helper function to check if a tag belongs to a category
 const isTagInCategory = (tag, catName) => {
-  if (!catName) return true;
+  if (catName === '') return true;
   
   const checkNodes = (nodes) => 
     nodes?.some(item => item.categories?.nodes[0]?.name.toLowerCase() === catName);
@@ -85,7 +85,7 @@ const getCoOccurringTags = (tags, filterTags, catName) => {
     tags.forEach(tag => {
       const processNodes = (nodes) => {
         nodes?.forEach(item => {
-          const matchesCategory = !catName || item.categories?.nodes[0]?.name.toLowerCase() === catName;
+          const matchesCategory = catName === '' || item.categories?.nodes[0]?.name.toLowerCase() === catName;
           const hasFilterTag = item.tags?.nodes?.some(t => t.slug.toLowerCase() === filterTag.slug.toLowerCase());
           
           if (matchesCategory && hasFilterTag) {
@@ -128,9 +128,9 @@ export const handleTags = (tags, catName = '', pinnedTags = [], tagCutoff = 10) 
   if (checkedTags.length > 0) {
     const tagsInCategory = catName ? tags.filter(tag => isTagInCategory(tag, catName)) : tags;
     const coOccurringTagSlugs = getCoOccurringTags(tags, checkedTags, catName);
-    // Filter to only tags that are both in category AND co-occurring
+    // Only show tags that are both in the category AND co-occurring
     filteredTags = tagsInCategory.filter(tag => 
-      coOccurringTagSlugs.includes(tag.slug) || tag.checked === true
+      coOccurringTagSlugs.includes(tag.slug.toLowerCase()) || tag.checked === true
     );
   }
   // If no tags selected but category specified, filter by category
