@@ -103,7 +103,9 @@ function Work({data, search}) {
         <MobileFilters />
       }
       <List
-        items={isTagMode ? tagQueryResults : initial} loading={response.loading} 
+        items={isTagMode ? tagQueryResults : initial} loading={response.loading}
+        selectTags={handleSelection}
+        clearTags={handleClear}
         isTagMode={isTagMode}/>
       {showDesktopFilters &&
         <Filters
