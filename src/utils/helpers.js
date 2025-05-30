@@ -6,10 +6,6 @@ export const getMonthName = (index) => {
   return monthNames[index-1]
 }
 
-function flatten(a) {
-    return Array.isArray(a) ? [].concat(...a.map(flatten)) : a;
-}
-
 // sorts Tags array when we are in TagMode
 export const sortTags = (tags) => {
    return tags
@@ -90,7 +86,10 @@ const getCoOccurringTags = (tags, filterTags, catName) => {
           
           if (matchesCategory && hasFilterTag) {
             item.tags?.nodes?.forEach(node => {
-              if (node.slug) coTagSlugs.add(node.slug);
+              if (node.slug){
+                 coTagSlugs.add(node.slug);
+                 console.log(item.title)
+              }
             });
           }
         });
