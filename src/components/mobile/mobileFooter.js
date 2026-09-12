@@ -24,11 +24,11 @@ const MobileFooter = () => {
         </div>
 
         <div style={{margin: '6px 0'}}  className='metadata'>
-          <a href="https://bsky.app/profile/shannonmattern.bsky.social">blueSky</a>
+          <a href="https://www.are.na/shannon-mattern/index">are.na</a>
         </div>
 
         <div style={{margin: '6px 0'}}  className='metadata'>
-          <a href="https://pinboard.in/u:shannon_mattern">pinboard</a>
+          <a href="https://shannon_mattern.raindrop.page/all-73408421">raindrop</a>
         </div>
 
         <div style={{margin: '6px 0'}}  className='metadata'>

@@ -27,10 +27,10 @@ import Sticker_Classes from '../images/assets/Sticker_Classes.svg'
 import Sticker_Classes_text from '../images/assets/Sticker_Classes_text.svg'
 import Sticker_Projects from '../images/assets/Sticker_Projects.svg'
 import Sticker_Projects_text from '../images/assets/Sticker_Projects_text.svg'
-import Sticker_Pinboard from '../images/assets/Sticker_Pinboard.svg'
-import Sticker_Pinboard_text from '../images/assets/Sticker_Pinboard_text.svg'
-import Sticker_Bluesky from '../images/assets/Sticker_Bluesky.svg'
-import Sticker_Bluesky_text from '../images/assets/Sticker_Bluesky_text.svg'
+import Sticker_Arena from '../images/assets/Sticker_Arena.svg'
+import Sticker_Arena_text from '../images/assets/Sticker_Arena_text.svg'
+import Sticker_Raindrop from '../images/assets/Sticker_Raindrop.svg'
+import Sticker_Raindrop_text from '../images/assets/Sticker_Raindrop_text.svg'
 import Sticker_Upcoming from '../images/assets/Sticker_Upcoming.svg'
 import Sticker_Upcoming_text from '../images/assets/Sticker_Upcoming_text.svg'
 import Sticker_RSS from '../images/assets/Sticker_RSS.svg'
@@ -157,10 +157,10 @@ export default function HomePage() {
             }}>
             <a aria-label='about' href="/about/"><Sticker_About_text id='sticker-about-text' /><Sticker_About style={{height: '120%'}} id='sticker-about' /></a>
             <a aria-label='email' href="mailto:smattern@metro.org?subject=Hi Shannon!"><Sticker_Email_text id='sticker-email-text' /><Sticker_Email style={{height: '120%'}} id='sticker-email' /></a>
-            <a aria-label='blueSky' href="https://bsky.app/profile/shannonmattern.bsky.social"><Sticker_Bluesky_text id='sticker-twitter-text' /><Sticker_Bluesky style={{height: '120%'}} id='sticker-twitter' /></a>
             <a aria-label='CV' href="https://icd.wordsinspace.net/static_files/matterncv.pdf"><Sticker_CV_text id='sticker-cv-text' /><Sticker_CV style={{height: '120%'}} id='sticker-cv'/></a>
-            <a aria-label='pinboard' href="https://pinboard.in/u:shannon_mattern"><Sticker_Pinboard_text id='sticker-pinboard-text' /><Sticker_Pinboard style={{height: '120%'}} id='sticker-pinboard' /></a>
-            <a aria-label='RSS' href="https://wordsinspace.net/rss.xml"><Sticker_RSS_text id='sticker-RSS-text' /><Sticker_RSS style={{height: '120%'}} id='sticker-RSS'/></a>
+            <a aria-label='arena' href="https://www.are.na/shannon-mattern/index"><Sticker_Arena_text id='sticker-arena-text' /><Sticker_Arena style={{height: '120%'}} id='sticker-arena' /></a>
+            <a aria-label='raindrop' href="https://shannon_mattern.raindrop.page/all-73408421"><Sticker_Raindrop_text id='sticker-twitter-text' /><Sticker_Raindrop style={{height: '120%'}} id='sticker-twitter' /></a>
+            <a aria-label='RSS' href="https://wordsinspace.net/rss.xml"><Sticker_RSS_text id='sticker-RSS-text' /><Sticker_Email style={{height: '120%'}} id='sticker-RSS'/></a>
           </div>
         </div>
       </div>
