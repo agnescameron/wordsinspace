@@ -32,7 +32,7 @@ const MobileFooter = () => {
         </div>
 
         <div style={{margin: '6px 0'}}  className='metadata'>
-          <a href="https://wordsinspace.net/shannon/wp-content/uploads/2019/09/matterncv2019.pdf">CV</a>
+          <a href="https://icd.wordsinspace.net/static_files/matterncv.pdf">CV</a>
         </div>
 
         <div style={{margin: '6px 0'}}  className='metadata'>
